@@ -8,7 +8,7 @@ namespace IndividualGames.UI
     /// </summary>
     public class PlayerAmmoCounter : LabelChangeable
     {
-        public static readonly int k_PlayerAmmoCounter = "Label.PlayerAmmoCounter".GetHashCode();
+        public static readonly int k_PlayerAmmoCounter = "Label.AmmoCounter".GetHashCode();
 
         private void Awake()
         {

@@ -8,7 +8,7 @@ namespace IndividualGames.UI
     /// </summary>
     public class LevelUpLabel : LabelChangeable
     {
-        public static readonly int k_LevelUpLabel = $"Label.{nameof(LevelUpLabel)}".GetHashCode();
+        public static readonly int k_LevelUpLabel = "Level".GetHashCode();
 
         private void Awake()
         {

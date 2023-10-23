@@ -11,6 +11,7 @@ namespace IndividualGames.Player
 
         [Header("Game Components")]
         [SerializeField] private CharacterController _controller;
+        [SerializeField] private GameObject _barrel;
 
         #region CharacterController Data
         [Header("PlayerData")]
@@ -25,10 +26,10 @@ namespace IndividualGames.Player
 
         #region PlayerInput
         private PlayerInputs _input;
-        private Vector2 PlayerMovement => _input.Player.Movement.ReadValue<Vector2>();
-        private Vector2 MouseDelta => _input.Player.Look.ReadValue<Vector2>();
-        private bool PlayerSprint => _input.Player.Sprint.ReadValue<float>() > .5f;
-        private bool PlayerJumped => _input.Player.Jump.ReadValue<float>() > .5f;
+        private Vector2 Movement => _input.Player.Movement.ReadValue<Vector2>();
+        private bool MouseChanged => _input.Player.Look.ReadValue<Vector2>().magnitude > .1f;
+        private bool Sprinting => _input.Player.Sprint.ReadValue<float>() > .5f;
+        private bool Jumped => _input.Player.Jump.ReadValue<float>() > .5f;
         #endregion
 
         private void Awake()
@@ -50,28 +51,39 @@ namespace IndividualGames.Player
             }
 
             //move
-            if (!PlayerSprint)
+            Vector3 moveDirection = Vector3.zero;
+            if (!Sprinting)
             {
-                Vector3 movementVector = new Vector3(PlayerMovement.x, 0f, PlayerMovement.y);
-                _controller.Move(movementVector * Time.deltaTime * _moveSpeed);
+                var barrelForward = _barrel.transform.forward;
+                var barrelRight = _barrel.transform.right;
+                //Vector3 movementVector = new Vector3(Movement.x, 0f, Movement.y);
+                Vector3 movementVector = (barrelForward * Movement.y + barrelRight * Movement.x) * _moveSpeed * Time.deltaTime;
+                moveDirection = movementVector * Time.deltaTime * _moveSpeed;
+            }
+            else if (Sprinting && _grounded)
+            {
+                moveDirection = transform.forward * Time.deltaTime * _sprintSpeed;
             }
 
-            Vector3 sprintVelocity;
-            //sprint
-            if (PlayerSprint && _grounded)
+            if (moveDirection != Vector3.zero)
             {
-                sprintVelocity = transform.forward * Time.deltaTime * _sprintSpeed;
-                _controller.Move(sprintVelocity);
+                _controller.Move(moveDirection);
             }
 
             //gravity
-            if (PlayerJumped && _grounded)
+            if (Jumped && _grounded)
             {
                 _playerVelocity.y += Mathf.Sqrt(_jumpHeight * -3f * _gravityValue);
             }
             _playerVelocity.y += _gravityValue * Time.deltaTime;
             _controller.Move(_playerVelocity * Time.deltaTime);
-        }
 
+            //rotate player
+            /*if (MouseChanged)
+            {
+                Vector3 lookDirection = new Vector3(_barrel.transform.forward.x, 0, _barrel.transform.forward.z);
+                transform.forward = lookDirection.normalized;
+            }*/
+        }
     }
 }

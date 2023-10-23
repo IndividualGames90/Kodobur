@@ -5,11 +5,11 @@ namespace IndividualGames.ScriptableObjects
     /// <summary>
     /// Data for enemy's stats.
     /// </summary>
-    [CreateAssetMenu(fileName = "EnemyStats", menuName = "IndividualGames/EnemyStats")]
+    [CreateAssetMenu(fileName = nameof(EnemyStats), menuName = "IndividualGames/" + nameof(EnemyStats))]
     public class EnemyStats : ScriptableObject
     {
         public int Health = 30;
-        public const int AttackDamage = 10;
-        public const int ExperienceAward = 1;
+        public int AttackDamage = 10;
+        public int ExperienceAward = 1;
     }
 }

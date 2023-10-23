@@ -9,12 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6154c64a643ffa649a5080eaa1c89759, type: 3}
-  m_Name: PlayerStats
+  m_Script: {fileID: 11500000, guid: e02ce6e459897b842b4c75168eb8f58f, type: 3}
+  m_Name: PlayerLevelingData
   m_EditorClassIdentifier: 
-  Health: 100
-  HealthMaximum: 100
-  BulletCount: 10
-  KillScore: 0
-  Level: 1
-  ExperiencePoints: 0
+  LevelingGrade: 0200000003000000050000000700000009000000

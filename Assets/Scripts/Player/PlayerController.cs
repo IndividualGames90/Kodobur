@@ -1,6 +1,7 @@
 using IndividualGames.CaseLib.DI;
 using IndividualGames.CaseLib.Signalization;
 using IndividualGames.DI;
+using IndividualGames.Enemy;
 using IndividualGames.ScriptableObjects;
 using IndividualGames.UI;
 using UnityEngine;
@@ -17,6 +18,7 @@ namespace IndividualGames.Player
         [Header("Data:")]
         [SerializeField] private PlayerStats _playerStats;
         [SerializeField] private GunStats _gunStats;
+        [SerializeField] private PlayerLevelingData _levelingData;
 
         [Header("SubSystem:")]
         [SerializeField] private FPSController _fpsController;
@@ -26,13 +28,20 @@ namespace IndividualGames.Player
 
         private BasicSignal<string> _onPlayerHealthUpdate = new();
         private BasicSignal<string> _onEnemyKilledUpdate = new();
+        private BasicSignal<string> _onLevelUpUpdate = new();
+
+        private PlayerStats _playerStatsPersonal;
+        private GunStats _gunStatsPersonal;
 
         private void Awake()
         {
             PlayerInputs = new();
-            _playerStats.Health = _playerStats.HealthMaximum * _playerStats.Level;
+
+            _playerStatsPersonal = Instantiate(_playerStats);
+            _gunStatsPersonal = Instantiate(_gunStats);
+
             _fpsController.Init(new Container(PlayerInputs));
-            _gunController.Init(new GunContainerData(PlayerInputs, _gunStats));
+            _gunController.Init(new GunContainerData(PlayerInputs, _gunStatsPersonal));
 
             SignalizationSetup();
         }
@@ -43,9 +52,13 @@ namespace IndividualGames.Player
 
             _onPlayerHealthUpdate = (BasicSignal<string>)canvasHub.AcquireLabelChangeableSignal(LabelPlayerHealth.k_LabelPlayerHealth);
             _onEnemyKilledUpdate = (BasicSignal<string>)canvasHub.AcquireLabelChangeableSignal(PlayerKillCounter.k_PlayerKillCounter);
+            _onLevelUpUpdate = (BasicSignal<string>)canvasHub.AcquireLabelChangeableSignal(LevelUpLabel.k_LevelUpLabel);
 
-            _onPlayerHealthUpdate.Emit(_playerStats.Health.ToString());
-            _onEnemyKilledUpdate.Emit(_playerStats.KillScore.ToString());
+            _onPlayerHealthUpdate.Emit(_playerStatsPersonal.Health.ToString());
+            _onEnemyKilledUpdate.Emit(_playerStatsPersonal.KillScore.ToString());
+            _onLevelUpUpdate.Emit(_playerStatsPersonal.Level.ToString());
+
+            EnemyController.EnemyKilled.Connect(EnemyKilled);
         }
 
         private void OnEnable()
@@ -55,26 +68,52 @@ namespace IndividualGames.Player
 
         public void Damage(int damage)
         {
-            _playerStats.Health -= damage;
-            _onPlayerHealthUpdate.Emit(_playerStats.Health.ToString());
+            _playerStatsPersonal.Health -= damage;
+            _onPlayerHealthUpdate.Emit(_playerStatsPersonal.Health.ToString());
 
-            if (_playerStats.Health >= 0)
+            if (_playerStatsPersonal.Health >= 0)
             {
                 PlayerKilled.Emit();
             }
         }
 
         /// <summary> Player killed an enemy. </summary>
-        public void EnemyKilled()
+        public void EnemyKilled(int experienceGained)
         {
-            _playerStats.KillScore++;
-            _onEnemyKilledUpdate.Emit(_playerStats.KillScore.ToString());
+            _playerStatsPersonal.KillScore++;
+            _onEnemyKilledUpdate.Emit(_playerStatsPersonal.KillScore.ToString());
+            ExperienceGained(experienceGained);
         }
 
         /// <summary> Player leveled up. </summary>
         private void LevelUp()
         {
-            _playerStats.Level++;
+            _playerStatsPersonal.Level++;
+            _onLevelUpUpdate.Emit(_playerStatsPersonal.Level.ToString());
+        }
+
+        /// <summary> Gained experience. </summary>
+        private void ExperienceGained(int experienceGained)
+        {
+            _playerStatsPersonal.ExperiencePoints += experienceGained;
+
+            if (_playerStatsPersonal.ExperiencePoints >= _levelingData.LevelingGrade[_playerStatsPersonal.Level - 1])
+            {
+                _playerStatsPersonal.ExperiencePoints = 0;
+                LevelUp();
+            }
+        }
+
+        /// <summary> Ammo picked up. </summary>
+        private void AmmoGained(int ammoGained)
+        {
+            _gunStatsPersonal.CurrentAmmo += ammoGained;
+        }
+
+        /// <summary> Health picked up. </summary>
+        private void HealthGained(int healthGained)
+        {
+            _playerStatsPersonal.Health += healthGained;
         }
     }
 }

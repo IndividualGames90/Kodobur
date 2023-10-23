@@ -1,3 +1,4 @@
+using IndividualGames.Enemy;
 using IndividualGames.Player;
 using IndividualGames.Pool;
 using IndividualGames.Unity;
@@ -30,7 +31,7 @@ namespace IndividualGames.Weapon
             }
             else if (other.transform.CompareTag(Tags.Enemy))
             {
-                //TODO: other.GetComponent<EnemyController>().Damage(_damage);
+                other.GetComponent<EnemyController>().Damage(_damage);
             }
 
             _pool.ReturnToPool(gameObject);

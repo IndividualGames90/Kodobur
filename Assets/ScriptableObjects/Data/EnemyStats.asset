@@ -9,12 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6154c64a643ffa649a5080eaa1c89759, type: 3}
-  m_Name: PlayerStats
+  m_Script: {fileID: 11500000, guid: f6416f0b055faf842a71da86a49dc49d, type: 3}
+  m_Name: EnemyStats
   m_EditorClassIdentifier: 
-  Health: 100
-  HealthMaximum: 100
-  BulletCount: 10
-  KillScore: 0
-  Level: 1
-  ExperiencePoints: 0
+  Health: 30

@@ -5,7 +5,7 @@ namespace IndividualGames.ScriptableObjects
     /// <summary>
     /// Data for player's stats.
     /// </summary>
-    [CreateAssetMenu(fileName = "PlayerStats", menuName = "IndividualGames/PlayerStats")]
+    [CreateAssetMenu(fileName = nameof(PlayerStats), menuName = "IndividualGames/" + nameof(PlayerStats))]
     public class PlayerStats : ScriptableObject
     {
         /// <summary> Current player health. </summary>

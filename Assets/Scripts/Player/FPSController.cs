@@ -56,7 +56,6 @@ namespace IndividualGames.Player
             {
                 var barrelForward = _barrel.transform.forward;
                 var barrelRight = _barrel.transform.right;
-                //Vector3 movementVector = new Vector3(Movement.x, 0f, Movement.y);
                 Vector3 movementVector = (barrelForward * Movement.y + barrelRight * Movement.x) * _moveSpeed * Time.deltaTime;
                 moveDirection = movementVector * Time.deltaTime * _moveSpeed;
             }

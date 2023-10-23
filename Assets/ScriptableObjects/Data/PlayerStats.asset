@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6154c64a643ffa649a5080eaa1c89759, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  Health: 70
+  Health: 0
   HealthMaximum: 100
   BulletCount: 10
-  BulletCountMaximum: 100
   KillScore: 0
-  Level: 0
+  Level: 1
   ExperiencePoints: 0

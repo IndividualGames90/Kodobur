@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bullet.Red
       objectReference: {fileID: 0}
+    - target: {fileID: 7062974829014585873, guid: 73c0afd256f41954d9971586a5dd10a8, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

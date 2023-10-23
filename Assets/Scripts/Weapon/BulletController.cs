@@ -1,3 +1,4 @@
+using IndividualGames.Player;
 using IndividualGames.Pool;
 using IndividualGames.Unity;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace IndividualGames.Weapon
         [SerializeField] private float _speed = 5f;
 
         private GameObjectPool _pool;
+        private int _damage;
         private bool _playerOwned;
 
         private void FixedUpdate()
@@ -20,25 +22,26 @@ namespace IndividualGames.Weapon
         {
             if (other.transform.CompareTag(Tags.Player) && !_playerOwned)
             {
-
+                other.GetComponent<PlayerController>().Damage(_damage);
             }
             else if (other.transform.CompareTag(Tags.Ground))
             {
-
+                //TODO: PLAY VFX
             }
             else if (other.transform.CompareTag(Tags.Enemy))
             {
-
+                //TODO: other.GetComponent<EnemyController>().Damage(_damage);
             }
 
             _pool.ReturnToPool(gameObject);
         }
 
         /// <summary> Bullet if fired and in motion. </summary>
-        public void Fired(bool playerOwned, GameObjectPool returnPool)
+        public void Fired(int damage, bool playerOwned, GameObjectPool returnPool)
         {
             _playerOwned = playerOwned;
             _pool = returnPool;
+            _damage = damage;
         }
 
         private void MoveForward()

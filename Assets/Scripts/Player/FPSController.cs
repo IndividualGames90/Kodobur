@@ -1,3 +1,4 @@
+using IndividualGames.CaseLib.DI;
 using UnityEngine;
 
 namespace IndividualGames.Player
@@ -5,17 +6,16 @@ namespace IndividualGames.Player
     /// <summary>
     /// FPS controls utilizing Unity charactercontroller and New input system.
     /// </summary>
-    public class FPSController : MonoBehaviour
+    public class FPSController : MonoBehaviour, IInitializable
     {
         public bool CanMove { get; private set; } = true;
 
-        [Header("Game Components")]
+        [Header("Game Components:")]
         [SerializeField] private CharacterController _controller;
         [SerializeField] private GameObject _barrel;
         [SerializeField] private GroundedChecker _groundedChecker;
 
-        #region CharacterController Data
-        [Header("PlayerData")]
+        [Header("PlayerData:")]
         [SerializeField] private float _moveSpeed = 2.0f;
         [SerializeField] private float _sprintSpeed = 3.0f;
 
@@ -23,28 +23,36 @@ namespace IndividualGames.Player
         private Vector3 _playerVelocity;
         private float _jumpHeight = 1.0f;
         private float _gravityValue = -9.81f;
-        #endregion
 
         #region PlayerInput
         private PlayerInputs _input;
         private Vector2 Movement => _input.Player.Movement.ReadValue<Vector2>();
         private bool Sprinting => _input.Player.Sprint.ReadValue<float>() > .5f;
         private bool Jumped => _input.Player.Jump.ReadValue<float>() > .5f;
+
         #endregion
+
+        public bool Initialized { get { return _initialized; } set { } }
+        private bool _initialized = false;
+
+        public void Init(IContainer playerInputs)
+        {
+            _input = (PlayerInputs)playerInputs.Value;
+            _initialized = true;
+        }
 
         private void Awake()
         {
-            _input = new();
             _groundedChecker.Grounded.Connect(OnGrounded);
-        }
-
-        private void OnEnable()
-        {
-            _input.Enable();
         }
 
         private void Update()
         {
+            if (!_initialized)
+            {
+                return;
+            }
+
             GroundBody();
             MoveBody();
             JumpBody();

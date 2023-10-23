@@ -9,7 +9,7 @@ namespace IndividualGames.ScriptableObjects
     public class EnemyStats : ScriptableObject
     {
         public int Health = 30;
-        public int AttackDamage = 10;
-        public int ExperienceAward = 1;
+        public const int AttackDamage = 10;
+        public const int ExperienceAward = 1;
     }
 }

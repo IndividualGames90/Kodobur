@@ -1,18 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Tags : MonoBehaviour
+namespace IndividualGames.Unity
 {
-    // Start is called before the first frame update
-    void Start()
+    /// <summary>
+    /// Unity tags.
+    /// </summary>
+    public static class Tags
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public static string Player = "Player";
+        public static string Ground = "Ground";
+        public static string Enemy = "Enemy";
     }
 }

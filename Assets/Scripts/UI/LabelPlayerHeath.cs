@@ -8,7 +8,7 @@ namespace IndividualGames.UI
     /// </summary>
     public class LabelPlayerHealth : LabelChangeable
     {
-        public static readonly int k_LabelPlayerHealth = "Label.LabelPlayerHealth".GetHashCode();
+        public static readonly int k_LabelPlayerHealth = "PlayerHealth".GetHashCode();
 
         private void Awake()
         {

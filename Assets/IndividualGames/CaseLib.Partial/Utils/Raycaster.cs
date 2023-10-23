@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace IndividualGames.CaseLib.Utils
 {
-    //TODO: This class has layer dependencies, make this generic.
     /// <summary>
     /// Raycast encapsulation for specific use cases.
     /// </summary>
@@ -15,8 +14,6 @@ namespace IndividualGames.CaseLib.Utils
         /// <summary> Detect if we are hitting ground layer with down vector. </summary>
         public static (bool, RaycastHit) HitGround(Vector3 a_origin, float a_maxDistance)
         {
-            RayDebugger(new Ray(a_origin, Vector3.down), a_maxDistance);
-
             return (Physics.Raycast(a_origin,
                                     Vector3.down,
                                     out m_hit,
@@ -58,11 +55,12 @@ namespace IndividualGames.CaseLib.Utils
         }
 
 
-
+#if UNITY_EDITOR
         /// <summary> Debug rays by drawing </summary>
         private static void RayDebugger(Ray a_ray, float a_maxDistance)
         {
             Debug.DrawRay(a_ray.origin, a_ray.direction * a_maxDistance, Color.red, 5f);
         }
+#endif
     }
 }

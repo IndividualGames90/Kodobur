@@ -28,7 +28,6 @@ namespace IndividualGames.Player
         #region PlayerInput
         private PlayerInputs _input;
         private Vector2 Movement => _input.Player.Movement.ReadValue<Vector2>();
-        private bool MouseChanged => _input.Player.Look.ReadValue<Vector2>().magnitude > .1f;
         private bool Sprinting => _input.Player.Sprint.ReadValue<float>() > .5f;
         private bool Jumped => _input.Player.Jump.ReadValue<float>() > .5f;
         #endregion
@@ -46,13 +45,25 @@ namespace IndividualGames.Player
 
         private void Update()
         {
-            //_grounded = _controller.isGrounded;
-            if (_grounded && _playerVelocity.y < 0)
-            {
-                _playerVelocity.y = 0f;
-            }
+            GroundBody();
+            MoveBody();
+            JumpBody();
+        }
 
-            //move
+        /// <summary> Launch body for jumping. </summary>
+        private void JumpBody()
+        {
+            if (Jumped && _grounded)
+            {
+                _playerVelocity.y += Mathf.Sqrt(_jumpHeight * -3f * _gravityValue);
+            }
+            _playerVelocity.y += _gravityValue * Time.deltaTime;
+            _controller.Move(_playerVelocity * Time.deltaTime);
+        }
+
+        /// <summary> Move body according to movement and/or sprint. </summary>
+        private void MoveBody()
+        {
             Vector3 moveDirection = Vector3.zero;
             if (!Sprinting)
             {
@@ -72,16 +83,18 @@ namespace IndividualGames.Player
             {
                 _controller.Move(moveDirection);
             }
-
-            //gravity
-            if (Jumped && _grounded)
-            {
-                _playerVelocity.y += Mathf.Sqrt(_jumpHeight * -3f * _gravityValue);
-            }
-            _playerVelocity.y += _gravityValue * Time.deltaTime;
-            _controller.Move(_playerVelocity * Time.deltaTime);
         }
 
+        /// <summary> Completely ground the body. </summary>
+        private void GroundBody()
+        {
+            if (_grounded && _playerVelocity.y < 0)
+            {
+                _playerVelocity.y = 0f;
+            }
+        }
+
+        /// <summary> Callback for player is grounded. </summary>
         private void OnGrounded(bool grounded)
         {
             _grounded = grounded;

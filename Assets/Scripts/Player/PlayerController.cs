@@ -35,6 +35,11 @@ namespace IndividualGames.Player
 
         private void Awake()
         {
+#if UNITY_EDITOR
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+#endif
+
             PlayerInputs = new();
 
             _playerStatsPersonal = Instantiate(_playerStats);
@@ -105,13 +110,14 @@ namespace IndividualGames.Player
         }
 
         /// <summary> Ammo picked up. </summary>
-        private void AmmoGained(int ammoGained)
+        /// returns null if all ammo consumed, otherwise returns remaining value.
+        public int? AmmoGained(int ammoGained)
         {
-            _gunStatsPersonal.CurrentAmmo += ammoGained;
+            return _gunController.GainAmmo(ammoGained);
         }
 
         /// <summary> Health picked up. </summary>
-        private void HealthGained(int healthGained)
+        public void HealthGained(int healthGained)
         {
             _playerStatsPersonal.Health += healthGained;
         }

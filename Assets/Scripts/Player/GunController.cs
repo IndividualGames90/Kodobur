@@ -62,7 +62,7 @@ namespace IndividualGames.Player
         /// <summary> Check if has bullets to fire. </summary>
         private bool HasBullets()
         {
-            return _gunStats.CurrentAmmo != 0;
+            return _gunStats.BulletCarried != 0;
         }
 
         /// <summary> Fire gun in intervals. </summary>
@@ -82,21 +82,42 @@ namespace IndividualGames.Player
             _gunFireLocked = false;
         }
 
+        /// <summary> Change happened on ammo. </summary>
         private void OnAmmoUpdate()
         {
-            _onAmmoUpdate.Emit(_gunStats.CurrentAmmo.ToString());
+            _onAmmoUpdate.Emit(_gunStats.BulletCarried.ToString());
         }
 
+        /// <summary> Single ammo is spent. </summary>
         private void SpendAmmo()
         {
-            _gunStats.CurrentAmmo--;
+            _gunStats.BulletCarried--;
             OnAmmoUpdate();
         }
 
-        private void GainAmmo()
+        /// <summary> Ammo picked up. </summary>
+        /// returns null if all ammo consumed, otherwise returns remaining value.
+        public int? GainAmmo(int ammoGained)
         {
-            _gunStats.CurrentAmmo++;
-            OnAmmoUpdate();
+            if (_gunStats.BulletCarried == _gunStats.BulletCapacity)
+            {
+                return ammoGained;
+            }
+
+            var haveRoomForAmmo = _gunStats.BulletCapacity - _gunStats.BulletCarried >= ammoGained;
+            if (haveRoomForAmmo)
+            {
+                _gunStats.BulletCarried += ammoGained;
+                OnAmmoUpdate();
+                return null;
+            }
+            else
+            {
+                var exceedingBulletCount = _gunStats.BulletCarried + ammoGained;
+                _gunStats.BulletCarried = _gunStats.BulletCapacity;
+                OnAmmoUpdate();
+                return exceedingBulletCount - _gunStats.BulletCapacity;
+            }
         }
     }
 }

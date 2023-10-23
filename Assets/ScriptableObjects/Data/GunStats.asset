@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: GunStats
   m_EditorClassIdentifier: 
   AttackDamage: 10
-  AmmoCapacity: 10
-  CurrentAmmo: 10
+  BulletCarried: 95
+  BulletCapacity: 100
   PierceShot: 0

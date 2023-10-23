@@ -7,7 +7,7 @@ namespace IndividualGames.Unity
     /// </summary>
     public static class Layers
     {
-        public static readonly int Player = LayerMask.NameToLayer("Player");
-        public static readonly int Ground = LayerMask.NameToLayer("Environment");
+        public static readonly int Player = 1 << LayerMask.NameToLayer("Player");
+        public static readonly int Ground = 1 << LayerMask.NameToLayer("Environment");
     }
 }

@@ -15,6 +15,8 @@ namespace IndividualGames.CaseLib.Utils
         /// <summary> Detect if we are hitting ground layer with down vector. </summary>
         public static (bool, RaycastHit) HitGround(Vector3 a_origin, float a_maxDistance)
         {
+            RayDebugger(new Ray(a_origin, Vector3.down), a_maxDistance);
+
             return (Physics.Raycast(a_origin,
                                     Vector3.down,
                                     out m_hit,

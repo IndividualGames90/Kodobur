@@ -3,7 +3,7 @@ using UnityEngine;
 namespace IndividualGames.Player
 {
     /// <summary>
-    /// Player FPS controls.
+    /// FPS controls utilizing Unity charactercontroller and New input system.
     /// </summary>
     public class FPSController : MonoBehaviour
     {
@@ -12,6 +12,7 @@ namespace IndividualGames.Player
         [Header("Game Components")]
         [SerializeField] private CharacterController _controller;
         [SerializeField] private GameObject _barrel;
+        [SerializeField] private GroundedChecker _groundedChecker;
 
         #region CharacterController Data
         [Header("PlayerData")]
@@ -35,6 +36,7 @@ namespace IndividualGames.Player
         private void Awake()
         {
             _input = new();
+            _groundedChecker.Grounded.Connect(OnGrounded);
         }
 
         private void OnEnable()
@@ -44,7 +46,7 @@ namespace IndividualGames.Player
 
         private void Update()
         {
-            _grounded = _controller.isGrounded;
+            //_grounded = _controller.isGrounded;
             if (_grounded && _playerVelocity.y < 0)
             {
                 _playerVelocity.y = 0f;
@@ -57,11 +59,13 @@ namespace IndividualGames.Player
                 var barrelForward = _barrel.transform.forward;
                 var barrelRight = _barrel.transform.right;
                 Vector3 movementVector = (barrelForward * Movement.y + barrelRight * Movement.x) * _moveSpeed * Time.deltaTime;
-                moveDirection = movementVector * Time.deltaTime * _moveSpeed;
+                movementVector.y = 0f;
+                moveDirection = movementVector * _moveSpeed;
             }
             else if (Sprinting && _grounded)
             {
-                moveDirection = transform.forward * Time.deltaTime * _sprintSpeed;
+                var barrelForward = _barrel.transform.forward;
+                moveDirection = barrelForward * Time.deltaTime * _sprintSpeed;
             }
 
             if (moveDirection != Vector3.zero)
@@ -76,13 +80,11 @@ namespace IndividualGames.Player
             }
             _playerVelocity.y += _gravityValue * Time.deltaTime;
             _controller.Move(_playerVelocity * Time.deltaTime);
+        }
 
-            //rotate player
-            /*if (MouseChanged)
-            {
-                Vector3 lookDirection = new Vector3(_barrel.transform.forward.x, 0, _barrel.transform.forward.z);
-                transform.forward = lookDirection.normalized;
-            }*/
+        private void OnGrounded(bool grounded)
+        {
+            _grounded = grounded;
         }
     }
 }

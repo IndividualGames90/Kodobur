@@ -8,11 +8,11 @@
 
                      IndividualGames@yandex.com | https://github.com/IndividualGames90
 
-KodObur Case Features:
-
-> Player FPS controls, sprint, jump, health, experience.
-> Item drops, ammo and health.
-> Gun and bullet system
-> Leveling system
-> Gameplay and menu UIs
-> Enemy AI
+KodObur Case Features:  
+  
+> Player FPS controls, sprint, jump, health, experience.  
+> Item drops, ammo and health.  
+> Gun and bullet system  
+> Leveling system  
+> Gameplay and menu UIs  
+> Enemy AI  

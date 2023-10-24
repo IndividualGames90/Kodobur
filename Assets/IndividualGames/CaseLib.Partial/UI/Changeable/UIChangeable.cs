@@ -15,7 +15,18 @@ namespace IndividualGames.CaseLib.UI
         public BasicSignal<T> OnValueChanged { get; set; } = new();
 
         /// <summary> Use for hash lookups in hubs.</summary>
-        public int ID { get { return id; } set { } }
+        public int ID
+        {
+            get
+            {
+                if (id == 0)
+                {
+                    Init();
+                }
+                return id;
+            }
+            set { }
+        }
         private int id;
 
         public bool Initialized { get; set; } = false;

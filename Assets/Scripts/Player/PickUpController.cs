@@ -1,5 +1,6 @@
 using IndividualGames.ItemDrops;
 using IndividualGames.Unity;
+using System.Collections;
 using UnityEngine;
 
 namespace IndividualGames.Player
@@ -11,8 +12,22 @@ namespace IndividualGames.Player
     {
         [SerializeField] PlayerController _controller;
 
+        private WaitForSeconds _waitDelay = new(.5f);
+
+        private bool _triggerLocked = false;
+
         private void OnTriggerEnter(Collider other)
         {
+            if (!_triggerLocked)
+            {
+                StartCoroutine(TriggerDelay(other));
+            }
+        }
+
+        private IEnumerator TriggerDelay(Collider other)
+        {
+            _triggerLocked = true;
+
             if (other.CompareTag(Tags.Ammo))
             {
                 var valueContainer = other.GetComponent<ValueContainer>();
@@ -23,14 +38,19 @@ namespace IndividualGames.Player
                 }
                 else
                 {
-                    Destroy(other.gameObject);
+                    valueContainer.OnDestroyed();
                 }
             }
             else if (other.CompareTag(Tags.Health))
             {
-                _controller.HealthGained(other.GetComponent<ValueContainer>().Value);
-                Destroy(other.gameObject);
+                var valueContainer = other.GetComponent<ValueContainer>();
+                _controller.HealthGained(valueContainer.Value);
+                valueContainer.OnDestroyed();
             }
+
+            yield return _waitDelay;
+
+            _triggerLocked = false;
         }
     }
 }

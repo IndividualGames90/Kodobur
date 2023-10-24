@@ -21,6 +21,12 @@ namespace IndividualGames.CaseLib.UI
             }
             return id;
         }
+
+        /// <summary> Clear out all generated IDs. </summary>
+        public static void Clear()
+        {
+            idDictionary.Clear();
+        }
     }
 
 }

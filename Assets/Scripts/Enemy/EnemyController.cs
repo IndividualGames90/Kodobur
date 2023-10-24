@@ -167,7 +167,7 @@ namespace IndividualGames.Enemy
             _attackLocked = true;
 
             var bullet = _bulletPool.Retrieve();
-            bullet.GetComponent<BulletController>().Fired(_enemyStatsPersonal.AttackDamage, true, _bulletPool);
+            bullet.GetComponent<BulletController>().Fired(_enemyStatsPersonal.AttackDamage, false, _bulletPool);
             bullet.transform.position = _muzzleTransform.position;
             bullet.transform.forward = _playerLocation.position - _muzzleTransform.position;
 

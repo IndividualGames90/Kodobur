@@ -1,8 +1,11 @@
 using IndividualGames.CaseLib.DataStructures;
+using IndividualGames.CaseLib.Signalization;
+using IndividualGames.CaseLib.UI;
 using IndividualGames.Enemy;
 using IndividualGames.Player;
 using IndividualGames.Pool;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace IndividualGames.Game
 {
@@ -11,6 +14,9 @@ namespace IndividualGames.Game
     /// </summary>
     public class GameController : SingletonBehavior<GameController>
     {
+        /// <summary> Emit to signify game over. </summary>
+        public readonly BasicSignal GameEnded = new();
+
         public Transform PlayerLocation => _playerController.transform;
         [SerializeField] private PlayerController _playerController;
 
@@ -19,5 +25,31 @@ namespace IndividualGames.Game
 
         public NavNodeController NavNodeController => _navNodeController;
         [SerializeField] private NavNodeController _navNodeController;
+
+        [SerializeField] private GameObject _restartFrame;
+
+        private void Awake()
+        {
+            GameEnded.Connect(GameOver);
+
+            IncrementalIDMaker.Clear();
+        }
+
+        private void GameOver()
+        {
+            _restartFrame.SetActive(true);
+        }
+
+        public void RestartGame()
+        {
+            GameEnded.DisconnectAll();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        public void QuitGame()
+        {
+            GameEnded.DisconnectAll();
+            Application.Quit();
+        }
     }
 }

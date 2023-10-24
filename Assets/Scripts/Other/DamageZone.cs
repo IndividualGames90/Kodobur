@@ -9,11 +9,13 @@ namespace IndividualGames.Other
     /// </summary>
     public class DamageZone : MonoBehaviour
     {
+        [SerializeField] private int _damage = 10;
+
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag(Tags.Player))
             {
-                other.GetComponent<PlayerController>().Damage(10);
+                other.GetComponent<PlayerController>().Damage(_damage);
             }
         }
     }

@@ -119,5 +119,10 @@ namespace IndividualGames.Player
                 return exceedingBulletCount - _gunStats.BulletCapacity;
             }
         }
+
+        private void OnDestroy()
+        {
+            _onAmmoUpdate.DisconnectAll();
+        }
     }
 }

@@ -34,7 +34,14 @@ namespace IndividualGames.Weapon
                 other.GetComponent<EnemyController>().Damage(_damage);
             }
 
-            _pool.ReturnToPool(gameObject);
+            if (_pool)
+            {
+                _pool.ReturnToPool(gameObject);
+            }
+            else
+            {
+                Debug.Log($"Pool empty");
+            }
         }
 
         /// <summary> Bullet if fired and in motion. </summary>

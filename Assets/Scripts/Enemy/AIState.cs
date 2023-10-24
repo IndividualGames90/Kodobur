@@ -15,7 +15,6 @@ namespace IndividualGames.Enemy
         public AIState(AIParams aiParams)
         {
             _aiParams = aiParams;
-            StateChanged.Connect(Exit);
         }
 
         /// <summary> Logic runner of the node. </summary>
@@ -30,6 +29,7 @@ namespace IndividualGames.Enemy
         {
             if (_aiParams.EnemyController.IsDead())
             {
+                Exit();
                 StateChanged.Emit(AI.AIState.Die);
             }
         }
@@ -55,8 +55,12 @@ namespace IndividualGames.Enemy
 
             if (_aiParams.EnemyController.CanSpotPlayer())
             {
-                StateChanged.Emit(AI.AIState.Walk);
+                Exit();
+                StateChanged.Emit(AI.AIState.Run);
             }
+
+            Exit();
+            StateChanged.Emit(AI.AIState.Walk);
 
             base.Tick();
         }
@@ -73,6 +77,7 @@ namespace IndividualGames.Enemy
 
         public override void Exit()
         {
+            _aiParams.EnemyController.StopAgent();
             _aiParams.Animator.SetBool("Walk", false);
         }
 
@@ -82,8 +87,11 @@ namespace IndividualGames.Enemy
 
             if (_aiParams.EnemyController.CanSpotPlayer())
             {
+                Exit();
                 StateChanged.Emit(AI.AIState.Run);
             }
+
+            _aiParams.EnemyController.MoveTowardsNavNode();
 
             base.Tick();
         }
@@ -107,16 +115,19 @@ namespace IndividualGames.Enemy
         {
             _aiParams.Animator.SetBool("Run", true);
 
-            if (!_aiParams.EnemyController.CanSpotPlayer())
+            if (_aiParams.EnemyController.CanAttackPlayer())
             {
-                StateChanged.Emit(AI.AIState.Idle);
-            }
-            else if (_aiParams.EnemyController.CanAttackPlayer())
-            {
+                Exit();
                 StateChanged.Emit(AI.AIState.Attack);
+            }
+            else if (!_aiParams.EnemyController.CanSpotPlayer())
+            {
+                Exit();
+                StateChanged.Emit(AI.AIState.Idle);
             }
 
             _aiParams.EnemyController.MoveTowardsPlayer();
+            _aiParams.EnemyController.RotateTowardsPlayer();
 
             base.Tick();
         }
@@ -140,10 +151,18 @@ namespace IndividualGames.Enemy
         {
             _aiParams.Animator.SetBool("Attack", true);
 
-            if (!_aiParams.EnemyController.CanSpotPlayer())
+            if (!_aiParams.EnemyController.CanAttackPlayer())
             {
+                Exit();
+                StateChanged.Emit(AI.AIState.Run);
+            }
+            else if (!_aiParams.EnemyController.CanSpotPlayer())
+            {
+                Exit();
                 StateChanged.Emit(AI.AIState.Idle);
             }
+
+            _aiParams.EnemyController.RotateTowardsPlayer();
 
             base.Tick();
         }
@@ -169,6 +188,7 @@ namespace IndividualGames.Enemy
                 return;
             }
 
+            _aiParams.EnemyController.StopAgent();
             _isDead = true;
             _aiParams.Animator.SetTrigger("Die");
         }

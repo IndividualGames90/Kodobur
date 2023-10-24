@@ -1180,7 +1180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_CollectObjects: 0
+  m_CollectObjects: 3
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
@@ -1955,8 +1955,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerController: {fileID: 1221432838}
-  _enemyBulletPool: {fileID: 0}
-  _navNodeController: {fileID: 0}
+  _enemyBulletPool: {fileID: 627338664}
+  _navNodeController: {fileID: 579587698}
 --- !u!4 &668906291
 Transform:
   m_ObjectHideFlags: 0
@@ -5087,7 +5087,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1616045905849785907, guid: a0e3b6fb0e26a894f93c28a5dbcd35be, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.230178
+      value: -4.87
       objectReference: {fileID: 0}
     - target: {fileID: 1616045905849785907, guid: a0e3b6fb0e26a894f93c28a5dbcd35be, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5095,7 +5095,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1616045905849785907, guid: a0e3b6fb0e26a894f93c28a5dbcd35be, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.561116
+      value: 6.19
       objectReference: {fileID: 0}
     - target: {fileID: 1616045905849785907, guid: a0e3b6fb0e26a894f93c28a5dbcd35be, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5128,6 +5128,10 @@ PrefabInstance:
     - target: {fileID: 2790136870694437875, guid: a0e3b6fb0e26a894f93c28a5dbcd35be, type: 3}
       propertyPath: m_Name
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8428062122939077240, guid: a0e3b6fb0e26a894f93c28a5dbcd35be, type: 3}
+      propertyPath: m_StoppingDistance
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -32,7 +32,8 @@ namespace IndividualGames.Enemy
         private NavNodeController _navNodeController;
 
         private bool _attackLocked = false;
-        private WaitForSeconds _attackWait = new(.1f);
+        private WaitForSeconds _attackWait = new(.3f);
+        private bool _alive = true;
 
         private void Awake()
         {
@@ -46,22 +47,22 @@ namespace IndividualGames.Enemy
             _navNodeController = GameController.Instance.NavNodeController;
         }
 
-
         public void Damage(int damage)
         {
             _enemyStatsPersonal.Health -= damage;
 
-            if (_enemyStatsPersonal.Health <= 0)
-            {
-                Died();
-            }
+            IsDead();
         }
 
         public bool IsDead()
         {
-            if (_enemyStatsPersonal.Health <= 0)
+            if (_alive && _enemyStatsPersonal.Health <= 0)
             {
                 Died();
+                return true;
+            }
+            else if (_enemyStatsPersonal.Health <= 0)
+            {
                 return true;
             }
             return false;
@@ -69,6 +70,8 @@ namespace IndividualGames.Enemy
 
         private void Died()
         {
+            _alive = false;
+            StopAgent();
             EnemyKilled.Emit(_enemyStatsPersonal.ExperienceAward);
             StartCoroutine(DiedDelay());
         }
@@ -79,9 +82,13 @@ namespace IndividualGames.Enemy
             Destroy(gameObject);
         }
 
-        public void MoveTowards(Vector3 moveTo)
+        public void MoveTowards(Vector3 moveTo, bool forceMove = false)
         {
-            if (!_agent.pathPending && _agent.remainingDistance <= _agent.stoppingDistance)
+            if (forceMove)
+            {
+                _agent.SetDestination(moveTo);
+            }
+            else if (!_agent.pathPending && _agent.remainingDistance <= _agent.stoppingDistance)
             {
                 _agent.SetDestination(moveTo);
             }
@@ -89,12 +96,22 @@ namespace IndividualGames.Enemy
 
         public void MoveTowardsPlayer()
         {
-            MoveTowards(_playerLocation);
+            MoveTowards(_playerLocation, true);
         }
 
         public void MoveTowardsNavNode()
         {
             MoveTowards(_navNodeController.AcquireRandomNavNode());
+        }
+
+        public void StopAgent()
+        {
+            _agent.ResetPath();
+        }
+
+        private bool IsAgentAtTarget(Vector3 targetPoint, float tolerance = 0.1f)
+        {
+            return (_agent.transform.position - targetPoint).sqrMagnitude < tolerance * tolerance;
         }
 
         public void RotateTowards(Vector3 targetPosition)
@@ -105,14 +122,31 @@ namespace IndividualGames.Enemy
             transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, _enemyStatsPersonal.RotationSpeed * Time.deltaTime);
         }
 
+        public void RotateTowardsPlayer()
+        {
+            RotateTowards(GameController.Instance.PlayerLocation);
+        }
+
         public bool CanSpotPlayer()
         {
-            var ray = new Ray(transform.position, GameController.Instance.PlayerLocation);
+            if ((GameController.Instance.PlayerLocation - transform.position).sqrMagnitude
+                < _enemyStatsPersonal.SpotDistanceMax * _enemyStatsPersonal.SpotDistanceMax)
+            {
+                return true;
+            }
+
+            var ray = new Ray(transform.position, GameController.Instance.PlayerLocation - transform.position);
             return Raycaster.HitPlayer(ray, _enemyStatsPersonal.SpotDistanceMax).Item1;
         }
 
         public bool CanAttackPlayer()
         {
+            if ((GameController.Instance.PlayerLocation - transform.position).sqrMagnitude
+                < _enemyStatsPersonal.AttackDistanceMax * _enemyStatsPersonal.AttackDistanceMax)
+            {
+                return true;
+            }
+
             var ray = new Ray(transform.position, GameController.Instance.PlayerLocation);
             var canAttack = Raycaster.HitPlayer(ray, _enemyStatsPersonal.AttackDistanceMax).Item1;
 
@@ -131,7 +165,7 @@ namespace IndividualGames.Enemy
             var bullet = _bulletPool.Retrieve();
             bullet.GetComponent<BulletController>().Fired(_enemyStatsPersonal.AttackDamage, true, _bulletPool);
             bullet.transform.position = _muzzleTransform.position;
-            bullet.transform.forward = _muzzleTransform.forward;
+            bullet.transform.forward = -(_playerLocation - _muzzleTransform.forward);
 
             yield return _attackWait;
             _attackLocked = false;

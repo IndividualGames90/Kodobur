@@ -50,6 +50,7 @@ namespace IndividualGames.CaseLib.UI
         {
             if (!Initialized)
             {
+                Initialized = true;
                 Init();
             }
 

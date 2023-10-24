@@ -8,7 +8,7 @@ namespace IndividualGames.CaseLib.UI
     /// </summary>
     public class SliderChangeable : UIChangeable<float>
     {
-        [SerializeField] private Image image;
+        [SerializeField] protected Image image;
 
         private void Awake()
         {

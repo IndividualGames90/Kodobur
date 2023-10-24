@@ -28,24 +28,22 @@ namespace IndividualGames.Player
         private BasicSignal<string> _onPlayerHealthUpdate = new();
         private BasicSignal<string> _onEnemyKilledUpdate = new();
         private BasicSignal<string> _onLevelUpUpdate = new();
-        private BasicSignal<float> _onHealthChanged = new();
-        private BasicSignal<float> _onExperienceChanged = new();
+        private BasicSignal<float> _onHealthSliderChanged = new();
+        private BasicSignal<float> _onExperienceSliderChanged = new();
+
         private PlayerStats _playerStatsPersonal;
         private GunStats _gunStatsPersonal;
+        private PlayerLevelingData _levelingDataPersonal;
 
         private BasicSignal _gameEnded;
 
         private void Awake()
         {
-#if UNITY_EDITOR
-            /*Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;*/
-#endif
-
             PlayerInputs = new();
 
             _playerStatsPersonal = Instantiate(_playerStats);
             _gunStatsPersonal = Instantiate(_gunStats);
+            _levelingDataPersonal = Instantiate(_levelingData);
 
             _fpsController.Init(new Container(PlayerInputs));
             _gunController.Init(new GunContainerData(PlayerInputs, _gunStatsPersonal));
@@ -61,8 +59,8 @@ namespace IndividualGames.Player
             _onEnemyKilledUpdate = (BasicSignal<string>)canvasHub.AcquireLabelChangeableSignal(PlayerKillCounter.k_PlayerKillCounter);
             _onLevelUpUpdate = (BasicSignal<string>)canvasHub.AcquireLabelChangeableSignal(LevelUpLabel.k_LevelUpLabel);
 
-            _onHealthChanged = (BasicSignal<float>)canvasHub.AcquireLabelChangeableSignal(HealthSliderController.k_HealthSlider);
-            _onExperienceChanged = (BasicSignal<float>)canvasHub.AcquireLabelChangeableSignal(ExperienceSliderController.k_ExperienceSlider);
+            _onHealthSliderChanged = (BasicSignal<float>)canvasHub.AcquireLabelChangeableSignal(HealthSliderController.k_HealthSlider);
+            _onExperienceSliderChanged = (BasicSignal<float>)canvasHub.AcquireLabelChangeableSignal(ExperienceSliderController.k_ExperienceSlider);
 
             _onPlayerHealthUpdate.Emit(_playerStatsPersonal.Health.ToString());
             _onEnemyKilledUpdate.Emit(_playerStatsPersonal.KillScore.ToString());
@@ -114,7 +112,7 @@ namespace IndividualGames.Player
             _playerStatsPersonal.ExperiencePoints += experienceGained;
             OnExperienceChanged();
 
-            if (_playerStatsPersonal.ExperiencePoints >= _levelingData.LevelingGrade[_playerStatsPersonal.Level - 1])
+            if (_playerStatsPersonal.ExperiencePoints >= _levelingDataPersonal.LevelingGrade[_playerStatsPersonal.Level - 1])
             {
                 _playerStatsPersonal.ExperiencePoints = 0;
                 LevelUp();
@@ -122,7 +120,7 @@ namespace IndividualGames.Player
         }
 
         /// <summary> Ammo picked up. </summary>
-        /// returns null if all ammo consumed, otherwise returns remaining value.
+        /// <returns> null if all ammo consumed, otherwise returns remaining value.</returns>
         public int? AmmoGained(int ammoGained)
         {
             return _gunController.GainAmmo(ammoGained);
@@ -132,17 +130,19 @@ namespace IndividualGames.Player
         public void HealthGained(int healthGained)
         {
             _playerStatsPersonal.Health += healthGained;
+            _playerStatsPersonal.Health = Mathf.Clamp(_playerStatsPersonal.Health, 0, _playerStatsPersonal.HealthMaximum);
             OnHealthChanged();
         }
 
         private void OnHealthChanged()
         {
-            _onHealthChanged.Emit((float)_playerStatsPersonal.Health / _playerStatsPersonal.HealthMaximum);
+            _onHealthSliderChanged.Emit((float)_playerStatsPersonal.Health / _playerStatsPersonal.HealthMaximum);
+            _onPlayerHealthUpdate.Emit(_playerStatsPersonal.Health.ToString());
         }
 
         private void OnExperienceChanged()
         {
-            _onExperienceChanged.Emit((float)_playerStatsPersonal.ExperiencePoints / _levelingData.LevelingGrade[_playerStatsPersonal.Level - 1]);
+            _onExperienceSliderChanged.Emit((float)_playerStatsPersonal.ExperiencePoints / _levelingDataPersonal.LevelingGrade[_playerStatsPersonal.Level - 1]);
         }
 
         private void OnDestroy()
@@ -150,8 +150,8 @@ namespace IndividualGames.Player
             _onPlayerHealthUpdate.DisconnectAll();
             _onEnemyKilledUpdate.DisconnectAll();
             _onLevelUpUpdate.DisconnectAll();
-            _onHealthChanged.DisconnectAll();
-            _onExperienceChanged.DisconnectAll();
+            _onHealthSliderChanged.DisconnectAll();
+            _onExperienceSliderChanged.DisconnectAll();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace IndividualGames.Game
     /// </summary>
     public class GameController : SingletonBehavior<GameController>
     {
-        public Vector3 PlayerLocation => _playerController.transform.position;
+        public Transform PlayerLocation => _playerController.transform;
         [SerializeField] private PlayerController _playerController;
 
         public GameObjectPool EnemyBulletPool => _enemyBulletPool;

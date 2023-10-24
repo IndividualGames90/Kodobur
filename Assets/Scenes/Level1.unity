@@ -4958,7 +4958,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 967261889477758122, guid: 0a94d2f12ec2cba4eadf19b3f2cd9d2f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -5.5
       objectReference: {fileID: 0}
     - target: {fileID: 967261889477758122, guid: 0a94d2f12ec2cba4eadf19b3f2cd9d2f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4966,7 +4966,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 967261889477758122, guid: 0a94d2f12ec2cba4eadf19b3f2cd9d2f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -4.8
       objectReference: {fileID: 0}
     - target: {fileID: 967261889477758122, guid: 0a94d2f12ec2cba4eadf19b3f2cd9d2f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4999,6 +4999,14 @@ PrefabInstance:
     - target: {fileID: 4897932693209919931, guid: 0a94d2f12ec2cba4eadf19b3f2cd9d2f, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5955067307391729903, guid: 0a94d2f12ec2cba4eadf19b3f2cd9d2f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.047050238
+      objectReference: {fileID: 0}
+    - target: {fileID: 8229506069173771562, guid: 0a94d2f12ec2cba4eadf19b3f2cd9d2f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.047050238
       objectReference: {fileID: 0}
     - target: {fileID: 8536839335593749097, guid: 0a94d2f12ec2cba4eadf19b3f2cd9d2f, type: 3}
       propertyPath: _bulletPool
@@ -5131,7 +5139,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8428062122939077240, guid: a0e3b6fb0e26a894f93c28a5dbcd35be, type: 3}
       propertyPath: m_StoppingDistance
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

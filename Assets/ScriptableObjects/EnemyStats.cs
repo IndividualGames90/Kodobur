@@ -13,7 +13,7 @@ namespace IndividualGames.ScriptableObjects
         public int ExperienceAward = 1;
         public int Speed = 15;
         public int RotationSpeed = 15;
-        public float SpotDistanceMax = 1f;
-        public float AttackDistanceMax = 1f;
+        public float SpotDistanceMax = 15f;
+        public float AttackDistanceMax = 10f;
     }
 }

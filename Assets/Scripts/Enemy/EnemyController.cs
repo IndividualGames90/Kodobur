@@ -28,7 +28,7 @@ namespace IndividualGames.Enemy
 
         private EnemyStats _enemyStatsPersonal;
         private GameObjectPool _bulletPool;
-        private Vector3 _playerLocation;
+        private Transform _playerLocation;
         private NavNodeController _navNodeController;
 
         private bool _attackLocked = false;
@@ -96,7 +96,7 @@ namespace IndividualGames.Enemy
 
         public void MoveTowardsPlayer()
         {
-            MoveTowards(_playerLocation, true);
+            MoveTowards(_playerLocation.position, true);
         }
 
         public void MoveTowardsNavNode()
@@ -124,30 +124,34 @@ namespace IndividualGames.Enemy
 
         public void RotateTowardsPlayer()
         {
-            RotateTowards(GameController.Instance.PlayerLocation);
+            RotateTowards(GameController.Instance.PlayerLocation.position);
         }
 
         public bool CanSpotPlayer()
         {
-            if ((GameController.Instance.PlayerLocation - transform.position).sqrMagnitude
+            if ((GameController.Instance.PlayerLocation.position - transform.position).sqrMagnitude
                 < _enemyStatsPersonal.SpotDistanceMax * _enemyStatsPersonal.SpotDistanceMax)
             {
                 return true;
             }
 
-            var ray = new Ray(transform.position, GameController.Instance.PlayerLocation - transform.position);
+            var ray = new Ray(transform.position, GameController.Instance.PlayerLocation.position - transform.position);
             return Raycaster.HitPlayer(ray, _enemyStatsPersonal.SpotDistanceMax).Item1;
         }
 
         public bool CanAttackPlayer()
         {
-            if ((GameController.Instance.PlayerLocation - transform.position).sqrMagnitude
+            if ((GameController.Instance.PlayerLocation.position - transform.position).sqrMagnitude
                 < _enemyStatsPersonal.AttackDistanceMax * _enemyStatsPersonal.AttackDistanceMax)
             {
+                if (!_attackLocked)
+                {
+                    StartCoroutine(Attack());
+                }
                 return true;
             }
 
-            var ray = new Ray(transform.position, GameController.Instance.PlayerLocation);
+            var ray = new Ray(transform.position, GameController.Instance.PlayerLocation.position);
             var canAttack = Raycaster.HitPlayer(ray, _enemyStatsPersonal.AttackDistanceMax).Item1;
 
             if (canAttack && !_attackLocked)
@@ -165,7 +169,7 @@ namespace IndividualGames.Enemy
             var bullet = _bulletPool.Retrieve();
             bullet.GetComponent<BulletController>().Fired(_enemyStatsPersonal.AttackDamage, true, _bulletPool);
             bullet.transform.position = _muzzleTransform.position;
-            bullet.transform.forward = -(_playerLocation - _muzzleTransform.forward);
+            bullet.transform.forward = _playerLocation.position - _muzzleTransform.forward;
 
             yield return _attackWait;
             _attackLocked = false;

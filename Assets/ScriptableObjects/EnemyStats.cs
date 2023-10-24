@@ -11,5 +11,9 @@ namespace IndividualGames.ScriptableObjects
         public int Health = 30;
         public int AttackDamage = 10;
         public int ExperienceAward = 1;
+        public int Speed = 15;
+        public int RotationSpeed = 15;
+        public int SpotDistanceMax = 10;
+        public int AttackDistanceMax = 3;
     }
 }

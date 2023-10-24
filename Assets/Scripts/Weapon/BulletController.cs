@@ -34,7 +34,7 @@ namespace IndividualGames.Weapon
                 other.GetComponent<EnemyController>().Damage(_damage);
             }
 
-            if (_pool)
+            if (_pool != null)
             {
                 _pool.ReturnToPool(gameObject);
             }

@@ -1,4 +1,5 @@
 using IndividualGames.DS;
+using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ namespace IndividualGames.ItemDrops
         [SerializeField] private int _maxDropCount = 3;
 
         private Transform[] _locations;
+        private List<int> _spawnedLocationIDs = new();
 
         private Stopwatch _timer = new();
         private int _spawningInterval = 3;
@@ -46,7 +48,20 @@ namespace IndividualGames.ItemDrops
         /// <summary> Get a random position to spawn. </summary>
         private Vector3 RandomSpawnLocation()
         {
-            return _locations[Random.Range(0, _locations.Length)].position;
+            var index = Random.Range(0, _locations.Length);
+
+            while (_spawnedLocationIDs.Contains(index))
+            {
+                index = Random.Range(0, _locations.Length);
+            }
+            _spawnedLocationIDs.Add(index);
+
+            if (_spawnedLocationIDs.Count > 5)
+            {
+                _spawnedLocationIDs.Clear();
+            }
+
+            return _locations[index].position;
         }
 
         /// <summary> A drop is destroyed. </summary>

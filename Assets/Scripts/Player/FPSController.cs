@@ -29,7 +29,6 @@ namespace IndividualGames.Player
         private Vector2 Movement => _input.Player.Movement.ReadValue<Vector2>();
         private bool Sprinting => _input.Player.Sprint.ReadValue<float>() > .5f;
         private bool Jumped => _input.Player.Jump.ReadValue<float>() > .5f;
-
         #endregion
 
         public bool Initialized { get { return _initialized; } set { } }
@@ -84,6 +83,8 @@ namespace IndividualGames.Player
             else if (Sprinting && _grounded)
             {
                 var barrelForward = _barrel.transform.forward;
+                barrelForward.y = 0;
+                barrelForward.Normalize();
                 moveDirection = barrelForward * Time.deltaTime * _sprintSpeed;
             }
 

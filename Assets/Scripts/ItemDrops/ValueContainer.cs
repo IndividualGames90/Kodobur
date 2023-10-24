@@ -21,6 +21,11 @@ namespace IndividualGames.ItemDrops
             {
                 _value = value;
                 _valueLabel.text = value.ToString();
+
+                if (_value <= 0)
+                {
+                    OnDestroyed();
+                }
             }
         }
         [SerializeField] private int _value = 0;

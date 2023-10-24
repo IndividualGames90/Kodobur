@@ -23,6 +23,7 @@ namespace IndividualGames.Enemy
         [SerializeField] private AI _ai;
         [SerializeField] private NavMeshAgent _agent;
         [SerializeField] private Animator _animator;
+        [SerializeField] private GameObject[] _fireVFX;
 
         [SerializeField] private Transform _muzzleTransform;
 
@@ -35,6 +36,9 @@ namespace IndividualGames.Enemy
         private WaitForSeconds _attackWait = new(.3f);
         private bool _alive = true;
 
+        private ParticleSystem _fireOne;
+        private ParticleSystem _fireTwo;
+
         private void Awake()
         {
             _enemyStatsPersonal = Instantiate(_enemyStats);
@@ -45,6 +49,19 @@ namespace IndividualGames.Enemy
 
             _playerLocation = GameController.Instance.PlayerLocation;
             _navNodeController = GameController.Instance.NavNodeController;
+
+            InitializeVFX();
+        }
+
+        private void InitializeVFX()
+        {
+            if (_fireOne == null || _fireTwo == null)
+            {
+                _fireOne = _fireVFX[0].GetComponent<ParticleSystem>();
+                _fireTwo = _fireVFX[1].GetComponent<ParticleSystem>();
+                _fireOne.Stop();
+                _fireTwo.Stop();
+            }
         }
 
         public void Damage(int damage)
@@ -54,6 +71,7 @@ namespace IndividualGames.Enemy
             IsDead();
         }
 
+        /// <summary> Enemy death check. </summary>
         public bool IsDead()
         {
             if (_alive && _enemyStatsPersonal.Health <= 0)
@@ -68,6 +86,7 @@ namespace IndividualGames.Enemy
             return false;
         }
 
+        /// <summary> Enemy has died. </summary>
         private void Died()
         {
             _alive = false;
@@ -76,12 +95,14 @@ namespace IndividualGames.Enemy
             StartCoroutine(DiedDelay());
         }
 
+        /// <summary> Delay to show death animation and corpse hang. </summary>
         private IEnumerator DiedDelay()
         {
             yield return new WaitForSeconds(2);
             Destroy(gameObject);
         }
 
+        /// <summary> Set destination towards a given target. Can be forced without checks. </summary>
         public void MoveTowards(Vector3 moveTo, bool forceMove = false)
         {
             if (forceMove)
@@ -94,26 +115,25 @@ namespace IndividualGames.Enemy
             }
         }
 
+        /// <summary> Set destination for player. </summary>
         public void MoveTowardsPlayer()
         {
             MoveTowards(_playerLocation.position, true);
         }
 
+        /// <summary> Set destination for a random navnode. </summary>
         public void MoveTowardsNavNode()
         {
             MoveTowards(_navNodeController.AcquireRandomNavNode());
         }
 
+        /// <summary> Reset navmesh for full stop. </summary>
         public void StopAgent()
         {
             _agent.ResetPath();
         }
 
-        private bool IsAgentAtTarget(Vector3 targetPoint, float tolerance = 0.1f)
-        {
-            return (_agent.transform.position - targetPoint).sqrMagnitude < tolerance * tolerance;
-        }
-
+        /// <summary> One incremental of rotating towards given target. </summary>
         public void RotateTowards(Vector3 targetPosition)
         {
             Vector3 direction = targetPosition - transform.position;
@@ -122,11 +142,13 @@ namespace IndividualGames.Enemy
             transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, _enemyStatsPersonal.RotationSpeed * Time.deltaTime);
         }
 
+        /// <summary> One incremental of rotating towards player. </summary>
         public void RotateTowardsPlayer()
         {
             RotateTowards(GameController.Instance.PlayerLocation.position);
         }
 
+        /// <summary> Situation check to see player. </summary>
         public bool CanSpotPlayer()
         {
             if ((GameController.Instance.PlayerLocation.position - transform.position).sqrMagnitude
@@ -139,6 +161,7 @@ namespace IndividualGames.Enemy
             return Raycaster.HitPlayer(ray, _enemyStatsPersonal.SpotDistanceMax).Item1;
         }
 
+        /// <summary> Situation check to attack player. </summary>
         public bool CanAttackPlayer()
         {
             if ((GameController.Instance.PlayerLocation.position - transform.position).sqrMagnitude
@@ -162,6 +185,7 @@ namespace IndividualGames.Enemy
             return canAttack;
         }
 
+        /// <summary> Single instance of enemy attack. </summary>
         private IEnumerator Attack()
         {
             _attackLocked = true;
@@ -173,6 +197,29 @@ namespace IndividualGames.Enemy
 
             yield return _attackWait;
             _attackLocked = false;
+        }
+
+        /// <summary> Turn VFX on or off with flag </summary>
+        public void ToggleFireVFX(bool firing)
+        {
+            if (_fireOne == null || _fireTwo == null)
+            {
+                InitializeVFX();
+            }
+
+            if (firing)
+            {
+                if (!_fireOne.isPlaying || !_fireTwo.isPlaying)
+                {
+                    _fireOne.Play();
+                    _fireTwo.Play();
+                }
+            }
+            else
+            {
+                _fireOne.Stop();
+                _fireTwo.Stop();
+            }
         }
     }
 }

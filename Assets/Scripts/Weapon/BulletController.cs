@@ -2,6 +2,7 @@ using IndividualGames.Enemy;
 using IndividualGames.Player;
 using IndividualGames.Pool;
 using IndividualGames.Unity;
+using System.Collections;
 using UnityEngine;
 
 namespace IndividualGames.Weapon
@@ -11,6 +12,7 @@ namespace IndividualGames.Weapon
         [SerializeField] private float _speed = 5f;
 
         private GameObjectPool _pool;
+        private WaitForSeconds _waitPoolReturn = new(20);
         private int _damage;
         private bool _playerOwned;
 
@@ -50,11 +52,18 @@ namespace IndividualGames.Weapon
             _playerOwned = playerOwned;
             _pool = returnPool;
             _damage = damage;
+            StartCoroutine(PoolCountdown());
         }
 
         private void MoveForward()
         {
             transform.position += transform.forward * _speed * Time.deltaTime;
+        }
+
+        private IEnumerator PoolCountdown()
+        {
+            yield return _waitPoolReturn;
+            _pool.ReturnToPool(gameObject);
         }
     }
 }

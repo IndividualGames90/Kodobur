@@ -144,11 +144,13 @@ namespace IndividualGames.Enemy
 
         public override void Exit()
         {
+            _aiParams.EnemyController.ToggleFireVFX(false);
             _aiParams.Animator.SetBool("Attack", false);
         }
 
         public override void Tick()
         {
+            _aiParams.EnemyController.ToggleFireVFX(true);
             _aiParams.Animator.SetBool("Attack", true);
 
             if (!_aiParams.EnemyController.CanAttackPlayer())

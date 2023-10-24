@@ -50,6 +50,7 @@ namespace IndividualGames.CaseLib.UI
         {
             if (!Initialized)
             {
+                Initialized = true;
                 Init();
             }
 
@@ -59,6 +60,11 @@ namespace IndividualGames.CaseLib.UI
             }
 
             return null;
+        }
+
+        private void OnDestroy()
+        {
+            uiSignals.Clear();
         }
     }
 }

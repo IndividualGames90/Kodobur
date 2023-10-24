@@ -5,6 +5,7 @@ using IndividualGames.Enemy;
 using IndividualGames.Game;
 using IndividualGames.ScriptableObjects;
 using IndividualGames.UI;
+using System;
 using UnityEngine;
 
 namespace IndividualGames.Player
@@ -142,7 +143,14 @@ namespace IndividualGames.Player
 
         private void OnExperienceChanged()
         {
-            _onExperienceSliderChanged.Emit((float)_playerStatsPersonal.ExperiencePoints / _levelingDataPersonal.LevelingGrade[_playerStatsPersonal.Level - 1]);
+            try
+            {
+                _onExperienceSliderChanged.Emit((float)_playerStatsPersonal.ExperiencePoints / _levelingDataPersonal.LevelingGrade[_playerStatsPersonal.Level - 1]);
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                Debug.Log($"{e.GetType().Name}: Level exceeded, not applicable to this case. Unhandled as is.");
+            }
         }
 
         private void OnDestroy()
@@ -151,7 +159,7 @@ namespace IndividualGames.Player
             _onEnemyKilledUpdate.DisconnectAll();
             _onLevelUpUpdate.DisconnectAll();
             _onHealthSliderChanged.DisconnectAll();
-            _onExperienceSliderChanged.DisconnectAll();
+            //_onExperienceSliderChanged.DisconnectAll();
         }
     }
 }

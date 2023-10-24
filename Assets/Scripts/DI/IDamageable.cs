@@ -5,6 +5,7 @@ namespace IndividualGames.DI
     /// </summary>
     public interface IDamageable
     {
+        /// <summary> Perform damage on this object. </summary>
         public void Damage(int damage);
     }
 }

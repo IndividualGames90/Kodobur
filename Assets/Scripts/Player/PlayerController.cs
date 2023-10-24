@@ -2,6 +2,7 @@ using IndividualGames.CaseLib.DI;
 using IndividualGames.CaseLib.Signalization;
 using IndividualGames.DI;
 using IndividualGames.Enemy;
+using IndividualGames.Game;
 using IndividualGames.ScriptableObjects;
 using IndividualGames.UI;
 using UnityEngine;
@@ -13,8 +14,6 @@ namespace IndividualGames.Player
     /// </summary>
     public class PlayerController : MonoBehaviour, IDamageable
     {
-        public readonly BasicSignal PlayerKilled = new();
-
         [Header("Data:")]
         [SerializeField] private PlayerStats _playerStats;
         [SerializeField] private GunStats _gunStats;
@@ -34,11 +33,13 @@ namespace IndividualGames.Player
         private PlayerStats _playerStatsPersonal;
         private GunStats _gunStatsPersonal;
 
+        private BasicSignal _gameEnded;
+
         private void Awake()
         {
 #if UNITY_EDITOR
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            /*Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;*/
 #endif
 
             PlayerInputs = new();
@@ -71,6 +72,7 @@ namespace IndividualGames.Player
             OnExperienceChanged();
 
             EnemyController.EnemyKilled.Connect(EnemyKilled);
+            _gameEnded = GameController.Instance.GameEnded;
         }
 
         private void OnEnable()
@@ -84,9 +86,9 @@ namespace IndividualGames.Player
             _onPlayerHealthUpdate.Emit(_playerStatsPersonal.Health.ToString());
             OnHealthChanged();
 
-            if (_playerStatsPersonal.Health >= 0)
+            if (_playerStatsPersonal.Health <= 0)
             {
-                PlayerKilled.Emit();
+                _gameEnded.Emit();
             }
         }
 
@@ -141,6 +143,15 @@ namespace IndividualGames.Player
         private void OnExperienceChanged()
         {
             _onExperienceChanged.Emit((float)_playerStatsPersonal.ExperiencePoints / _levelingData.LevelingGrade[_playerStatsPersonal.Level - 1]);
+        }
+
+        private void OnDestroy()
+        {
+            _onPlayerHealthUpdate.DisconnectAll();
+            _onEnemyKilledUpdate.DisconnectAll();
+            _onLevelUpUpdate.DisconnectAll();
+            _onHealthChanged.DisconnectAll();
+            _onExperienceChanged.DisconnectAll();
         }
     }
 }

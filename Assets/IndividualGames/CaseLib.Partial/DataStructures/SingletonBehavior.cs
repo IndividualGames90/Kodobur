@@ -12,7 +12,7 @@ namespace IndividualGames.CaseLib.DataStructures
         {
             get
             {
-                if (destroyed)
+                if (instance != null && destroyed)
                 {
                     return null;
                 }
@@ -47,6 +47,5 @@ namespace IndividualGames.CaseLib.DataStructures
         {
             destroyed = true;
         }
-
     }
 }

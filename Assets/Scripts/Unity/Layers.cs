@@ -9,5 +9,6 @@ namespace IndividualGames.Unity
     {
         public static readonly int Player = 1 << LayerMask.NameToLayer("Player");
         public static readonly int Ground = 1 << LayerMask.NameToLayer("Environment");
+        public static readonly int Enemy = 1 << LayerMask.NameToLayer("Enemy");
     }
 }

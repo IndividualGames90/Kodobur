@@ -34,6 +34,11 @@ namespace IndividualGames.CaseLib.Signalization
         {
             m_action?.Invoke();
         }
+
+        public void DisconnectAll()
+        {
+            m_action = null;
+        }
     }
 
 

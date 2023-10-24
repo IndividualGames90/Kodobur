@@ -13,3 +13,9 @@ MonoBehaviour:
   m_Name: EnemyStats
   m_EditorClassIdentifier: 
   Health: 30
+  AttackDamage: 10
+  ExperienceAward: 1
+  Speed: 15
+  RotationSpeed: 15
+  SpotDistanceMax: 15
+  AttackDistanceMax: 10

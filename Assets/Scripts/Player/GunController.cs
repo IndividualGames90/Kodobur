@@ -73,9 +73,9 @@ namespace IndividualGames.Player
             SpendAmmo();
 
             var bullet = _bulletPool.Retrieve();
+            bullet.GetComponent<BulletController>().Fired(_gunStats.AttackDamage, true, _bulletPool);
             bullet.transform.position = _muzzleTransform.position;
             bullet.transform.forward = _muzzleTransform.forward;
-            bullet.GetComponent<BulletController>().Fired(_gunStats.AttackDamage, true, _bulletPool);
 
             yield return _waitGunFireInterval;
 
@@ -118,6 +118,11 @@ namespace IndividualGames.Player
                 OnAmmoUpdate();
                 return exceedingBulletCount - _gunStats.BulletCapacity;
             }
+        }
+
+        private void OnDestroy()
+        {
+            _onAmmoUpdate.DisconnectAll();
         }
     }
 }

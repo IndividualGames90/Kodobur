@@ -4,9 +4,9 @@ using UnityEngine.UI;
 namespace IndividualGames.UI
 {
     /// <summary>
-    /// General slider.
+    /// General slider controls.
     /// </summary>
-    public class Slider : MonoBehaviour
+    public class SliderControls : MonoBehaviour
     {
         [SerializeField] protected Image _slider;
 

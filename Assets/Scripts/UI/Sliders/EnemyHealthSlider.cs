@@ -5,7 +5,7 @@ namespace IndividualGames.UI
     /// <summary>
     /// Specific Control for 3D enemy health.
     /// </summary>
-    public class EnemyHealthSlider : Slider
+    public class EnemyHealthSlider : SliderControls
     {
         [SerializeField] private GameObject _backgroundImage;
 

@@ -17,8 +17,17 @@ namespace IndividualGames.ScriptableObjects
         #region Gun Talents
         public int GunDamage;
         public int GunAmmoMax;
-        public bool PierceShot;
-        public bool TripleShot;
+        public bool PierceShot = false;
+        public bool TripleShot = false;
+        #endregion
+
+        #region Caps
+        public int SkillCap = 5;
+        #endregion
+
+        #region Required Points
+        public int RequiredOtherSkillPoints = 1;
+        public int RequiredTripleShotPoints = 2; ///DevNote: Made this 2 for easier testing.
         #endregion
     }
 }

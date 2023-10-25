@@ -113,10 +113,17 @@ namespace IndividualGames.Player
             _playerStatsPersonal.ExperiencePoints += experienceGained;
             OnExperienceChanged();
 
-            if (_playerStatsPersonal.ExperiencePoints >= _levelingDataPersonal.LevelingGrade[_playerStatsPersonal.Level - 1])
+            try
             {
-                _playerStatsPersonal.ExperiencePoints = 0;
-                LevelUp();
+                if (_playerStatsPersonal.ExperiencePoints >= _levelingDataPersonal.LevelingGrade[_playerStatsPersonal.Level - 1])
+                {
+                    _playerStatsPersonal.ExperiencePoints = 0;
+                    LevelUp();
+                }
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                Debug.LogWarning($"{e.GetType().Name}: Level exceeded.");
             }
         }
 
@@ -149,7 +156,7 @@ namespace IndividualGames.Player
             }
             catch (IndexOutOfRangeException e)
             {
-                Debug.Log($"{e.GetType().Name}: Level exceeded, not applicable to this case. Unhandled as is.");
+                Debug.LogWarning($"{e.GetType().Name}: Level exceeded.");
             }
         }
 

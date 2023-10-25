@@ -102,6 +102,7 @@ namespace IndividualGames.Enemy
         private IEnumerator DiedDelay()
         {
             yield return new WaitForSeconds(2);
+            StopAllCoroutines();
             Destroy(gameObject);
         }
 

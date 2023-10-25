@@ -28,9 +28,9 @@ namespace IndividualGames.Player
 
         #region PlayerInput
         private PlayerInputs _input;
-        private Vector2 Movement => _input.Player.Movement.ReadValue<Vector2>();
-        private bool Sprinting => _input.Player.Sprint.ReadValue<float>() > .5f;
-        private bool Jumped => _input.Player.Jump.ReadValue<float>() > .5f;
+        private Vector2 _movement => _input.Player.Movement.ReadValue<Vector2>();
+        private bool _sprinting => _input.Player.Sprint.ReadValue<float>() > .5f;
+        private bool _jumped => _input.Player.Jump.ReadValue<float>() > .5f;
         #endregion
 
         public bool Initialized { get { return _initialized; } set { } }
@@ -62,7 +62,7 @@ namespace IndividualGames.Player
         /// <summary> Launch body for jumping. </summary>
         private void JumpBody()
         {
-            if (Jumped && _grounded)
+            if (_jumped && _grounded)
             {
                 _playerVelocity.y += Mathf.Sqrt(_jumpHeight * -3f * _gravityValue);
             }
@@ -74,15 +74,15 @@ namespace IndividualGames.Player
         private void MoveBody()
         {
             Vector3 moveDirection = Vector3.zero;
-            if (!Sprinting)
+            if (!_sprinting)
             {
                 var barrelForward = _barrel.transform.forward;
                 var barrelRight = _barrel.transform.right;
-                Vector3 movementVector = (barrelForward * Movement.y + barrelRight * Movement.x) * _moveSpeed * Time.deltaTime;
+                Vector3 movementVector = (barrelForward * _movement.y + barrelRight * _movement.x) * _moveSpeed * Time.deltaTime;
                 movementVector.y = 0f;
                 moveDirection = movementVector * _moveSpeed;
             }
-            else if (Sprinting && _grounded)
+            else if (_sprinting && _grounded)
             {
                 var barrelForward = _barrel.transform.forward;
                 barrelForward.y = 0;

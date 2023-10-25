@@ -30,6 +30,7 @@ namespace IndividualGames.Enemy
         [SerializeField] private EnemyHealthSlider _healthSlider;
 
         [SerializeField] private bool _isBoss;
+        [SerializeField] private bool _isFloating;
 
         private EnemyStats _enemyStatsPersonal;
         private GameObjectPool _bulletPool;
@@ -97,7 +98,20 @@ namespace IndividualGames.Enemy
             _alive = false;
             StopAgent();
             EnemyKilled.Emit(_enemyStatsPersonal.ExperienceAward);
+
+            if (_isFloating)
+            {
+                FloatingDied();
+            }
+
             StartCoroutine(DiedDelay());
+        }
+
+        private void FloatingDied()
+        {
+            Destroy(_agent);
+            var rb = gameObject.AddComponent<Rigidbody>();
+            rb.useGravity = true;
         }
 
         /// <summary> Delay to show death animation and corpse hang. </summary>

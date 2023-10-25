@@ -18,4 +18,9 @@ KodObur Case Features:
 > Enemy AI  
 
 Video:
+
+(updated)
+https://youtu.be/dC2KqgkhSYo
+
+(deprecated)
 https://www.youtube.com/watch?v=D2W42cbJEL4

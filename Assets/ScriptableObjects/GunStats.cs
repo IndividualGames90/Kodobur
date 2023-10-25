@@ -16,7 +16,10 @@ namespace IndividualGames.ScriptableObjects
         /// <summary> Maximum bullet capacity to be carried. </summary>
         public int BulletCapacity = 100;
 
-        /// <summary> Special attack type. </summary>
+        /// <summary> Special attack type that goes through enemies. </summary>
         public bool PierceShot = false;
+        /// <summary> Special attack type for three bullets in one. </summary>
+        public bool TripleShot = false;
+
     }
 }

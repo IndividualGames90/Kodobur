@@ -158,6 +158,7 @@ namespace IndividualGames.Enemy
         public override void Tick()
         {
             _aiParams.EnemyController.ToggleFireVFX(true);
+            _aiParams.EnemyController.StopAgent();
             _aiParams.Animator.SetBool("Attack", true);
 
             if (!_aiParams.EnemyController.CanAttackPlayer()

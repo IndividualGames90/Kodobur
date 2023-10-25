@@ -17,7 +17,12 @@ namespace IndividualGames.CaseLib.UI
 
         public override void OnChange(float changedValue)
         {
-            image.fillAmount = changedValue;
+            try
+            {
+                image.fillAmount = changedValue;
+            }
+            catch (MissingReferenceException e)
+            { }
         }
     }
 }

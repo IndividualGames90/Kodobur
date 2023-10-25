@@ -24,6 +24,11 @@ namespace IndividualGames.Player
         [SerializeField] private FPSController _fpsController;
         [SerializeField] private GunController _gunController;
 
+        public readonly BasicSignal PlayerLevelUp = new();
+
+        public bool TABKey => _tabKey;
+        private bool _tabKey => PlayerInputs.Player.TAB.ReadValue<float>() > 0;
+
         private PlayerInputs PlayerInputs;
 
         private BasicSignal<string> _onPlayerHealthUpdate = new();
@@ -105,6 +110,7 @@ namespace IndividualGames.Player
             _playerStatsPersonal.Level++;
             _onLevelUpUpdate.Emit(_playerStatsPersonal.Level.ToString());
             OnExperienceChanged();
+            PlayerLevelUp.Emit();
         }
 
         /// <summary> Gained experience. </summary>
@@ -156,9 +162,7 @@ namespace IndividualGames.Player
                 _onExperienceSliderChanged.Emit(value);
             }
             catch (IndexOutOfRangeException e)
-            {
-                Debug.LogWarning($"{e.GetType().Name}: Level exceeded.");
-            }
+            { }
         }
 
         private void OnDestroy()
@@ -168,6 +172,25 @@ namespace IndividualGames.Player
             _onLevelUpUpdate.DisconnectAll();
             _onHealthSliderChanged.DisconnectAll();
             _onExperienceSliderChanged.DisconnectAll();
+        }
+
+        /// <summary> Update skill values on upgrade. </summary>
+        public void UpdateSkills(SkillUpgrades newSkills)
+        {
+            if (_playerStatsPersonal == null || _gunStatsPersonal == null)
+            {
+                return;
+            }
+
+            _fpsController.UpdateMoveSpeed(newSkills.PlayerWalkSpeed / 2);
+            _fpsController.UpdateJumpSpeed(newSkills.PlayerJumpHeight);
+
+            _playerStatsPersonal.HealthMaximum += newSkills.PlayerHealthMax;
+
+            _gunStatsPersonal.AttackDamage += newSkills.GunDamage;
+            _gunStatsPersonal.BulletCapacity += newSkills.GunAmmoMax;
+            _gunStatsPersonal.PierceShot = newSkills.PierceShot;
+            _gunStatsPersonal.TripleShot = newSkills.TripleShot;
         }
     }
 }

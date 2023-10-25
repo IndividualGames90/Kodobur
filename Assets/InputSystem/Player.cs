@@ -71,6 +71,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TAB"",
+                    ""type"": ""Button"",
+                    ""id"": ""d975e99a-e6f3-4abd-877a-ed8b180ab0cf"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -172,6 +181,17 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""LMB"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ba504745-95d2-4cde-9f88-01a554a1fbf2"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TAB"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -185,6 +205,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_LMB = m_Player.FindAction("LMB", throwIfNotFound: true);
+        m_Player_TAB = m_Player.FindAction("TAB", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -251,6 +272,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_LMB;
+    private readonly InputAction m_Player_TAB;
     public struct PlayerActions
     {
         private @PlayerInputs m_Wrapper;
@@ -260,6 +282,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @LMB => m_Wrapper.m_Player_LMB;
+        public InputAction @TAB => m_Wrapper.m_Player_TAB;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -284,6 +307,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @LMB.started += instance.OnLMB;
             @LMB.performed += instance.OnLMB;
             @LMB.canceled += instance.OnLMB;
+            @TAB.started += instance.OnTAB;
+            @TAB.performed += instance.OnTAB;
+            @TAB.canceled += instance.OnTAB;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -303,6 +329,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @LMB.started -= instance.OnLMB;
             @LMB.performed -= instance.OnLMB;
             @LMB.canceled -= instance.OnLMB;
+            @TAB.started -= instance.OnTAB;
+            @TAB.performed -= instance.OnTAB;
+            @TAB.canceled -= instance.OnTAB;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -327,5 +356,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnLMB(InputAction.CallbackContext context);
+        void OnTAB(InputAction.CallbackContext context);
     }
 }

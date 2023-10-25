@@ -9,7 +9,7 @@ namespace IndividualGames.UI
     public class EnemyHealthSlider : MonoBehaviour
     {
         [SerializeField] private Image _slider;
-        [SerializeField] private GameObject _bg;
+        [SerializeField] private GameObject _backgroundImage;
 
         public void UpdateSliderValue(float value)
         {
@@ -17,7 +17,7 @@ namespace IndividualGames.UI
 
             if (value == 0)
             {
-                _bg.SetActive(false);
+                _backgroundImage.SetActive(false);
             }
         }
     }

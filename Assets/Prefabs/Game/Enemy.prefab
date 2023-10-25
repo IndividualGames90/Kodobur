@@ -232,7 +232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _slider: {fileID: 7878849763709425033}
-  _bg: {fileID: 7101766504312677700}
+  _backgroundImage: {fileID: 7101766504312677700}
 --- !u!114 &6215923717824138269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,6 +245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23e8b9c168c291444bd6306ff698130a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _reverseRotation: 0
 --- !u!1 &5452122869139309321
 GameObject:
   m_ObjectHideFlags: 0

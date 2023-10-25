@@ -65,5 +65,10 @@ namespace IndividualGames.Weapon
             yield return _waitPoolReturn;
             _pool.ReturnToPool(gameObject);
         }
+
+        private void OnDisable()
+        {
+            StopAllCoroutines();
+        }
     }
 }

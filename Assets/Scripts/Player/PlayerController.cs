@@ -152,7 +152,8 @@ namespace IndividualGames.Player
         {
             try
             {
-                _onExperienceSliderChanged.Emit((float)_playerStatsPersonal.ExperiencePoints / _levelingDataPersonal.LevelingGrade[_playerStatsPersonal.Level - 1]);
+                var value = (float)_playerStatsPersonal.ExperiencePoints / _levelingDataPersonal.LevelingGrade[_playerStatsPersonal.Level - 1];
+                _onExperienceSliderChanged.Emit(value);
             }
             catch (IndexOutOfRangeException e)
             {
@@ -166,7 +167,7 @@ namespace IndividualGames.Player
             _onEnemyKilledUpdate.DisconnectAll();
             _onLevelUpUpdate.DisconnectAll();
             _onHealthSliderChanged.DisconnectAll();
-            //_onExperienceSliderChanged.DisconnectAll();
+            _onExperienceSliderChanged.DisconnectAll();
         }
     }
 }

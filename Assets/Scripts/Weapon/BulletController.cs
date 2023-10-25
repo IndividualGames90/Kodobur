@@ -15,6 +15,8 @@ namespace IndividualGames.Weapon
         private WaitForSeconds _waitPoolReturn = new(20);
         private int _damage;
         private bool _playerOwned;
+        private bool _pierceShot;
+        private GameObject _lastHitTarget;
 
         private void FixedUpdate()
         {
@@ -29,16 +31,32 @@ namespace IndividualGames.Weapon
             }
             else if (other.transform.CompareTag(Tags.Ground))
             {
-                //TODO: PLAY VFX
+                _pool.ReturnToPool(gameObject);
             }
             else if (other.transform.CompareTag(Tags.Enemy))
             {
-                other.GetComponent<EnemyController>().Damage(_damage);
+                if (_pierceShot && _lastHitTarget == null)
+                {
+                    _lastHitTarget = other.gameObject;
+                    other.GetComponent<EnemyController>().Damage(_damage);
+                }
+                else if (_pierceShot && !_lastHitTarget.name.Equals(other.name))
+                {
+                    _lastHitTarget = other.gameObject;
+                    other.GetComponent<EnemyController>().Damage(_damage);
+                }
+                else if (!_pierceShot)
+                {
+                    other.GetComponent<EnemyController>().Damage(_damage);
+                }
             }
 
             if (_pool != null)
             {
-                _pool.ReturnToPool(gameObject);
+                if (!_pierceShot)
+                {
+                    _pool.ReturnToPool(gameObject);
+                }
             }
             else
             {
@@ -47,11 +65,13 @@ namespace IndividualGames.Weapon
         }
 
         /// <summary> Bullet if fired and in motion. </summary>
-        public void Fired(int damage, bool playerOwned, GameObjectPool returnPool)
+        public void Fired(int damage, bool playerOwned, GameObjectPool returnPool, bool pierceShot = false)
         {
+            _lastHitTarget = null;
             _playerOwned = playerOwned;
             _pool = returnPool;
             _damage = damage;
+            _pierceShot = pierceShot;
             StartCoroutine(PoolCountdown());
         }
 

@@ -73,7 +73,7 @@ namespace IndividualGames.Player
             SpendAmmo();
 
             var bullet = _bulletPool.Retrieve();
-            bullet.GetComponent<BulletController>().Fired(_gunStats.AttackDamage, true, _bulletPool);
+            bullet.GetComponent<BulletController>().Fired(_gunStats.AttackDamage, true, _bulletPool, _gunStats.PierceShot);
             bullet.transform.position = _muzzleTransform.position;
             bullet.transform.forward = _muzzleTransform.forward;
 

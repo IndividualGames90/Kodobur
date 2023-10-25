@@ -33,6 +33,8 @@ namespace IndividualGames.Game
 
             _skillTabView = _skillTab.GetComponent<SkillTabView>();
             _skillTabView.PressedButtonGameObject.Connect(OnButtonClicked);
+
+            UpdatePointsView();
         }
 
         private void Update()
@@ -48,7 +50,7 @@ namespace IndividualGames.Game
             }
         }
 
-        /// <summary> Callback for any button click from skill tab. </summary>
+        /// <summary> Callback for skill tab button clicks. </summary>
         private void OnButtonClicked(GameObject pressedButtonObject)
         {
             var fieldInfo = typeof(SkillUpgrades).GetField(pressedButtonObject.name,
@@ -59,37 +61,46 @@ namespace IndividualGames.Game
             var checkResultPair = CheckIfEnoughPoints(fieldInfo);
             if (checkResultPair.Item1)
             {
-                _skillUpgradesPersonal.SkillPoints -= checkResultPair.Item2;
-                UpdatePointsView();
-
                 var fieldValue = fieldInfo.GetValue(_skillUpgradesPersonal);
 
+                if (fieldInfo.FieldType == typeof(int) && (int)fieldValue < 5)
+                {
+                    fieldInfo.SetValue(_skillUpgradesPersonal, (int)fieldValue + 1);
+                    _skillUpgradesPersonal.SkillPoints -= checkResultPair.Item2;
+                }
+                else if (fieldInfo.FieldType == typeof(bool) && !(bool)fieldValue)
+                {
+                    fieldInfo.SetValue(_skillUpgradesPersonal, true);
+                    _skillUpgradesPersonal.SkillPoints -= checkResultPair.Item2;
 
-                //TODO: Upgrade related skill.
+                }
             }
             else
             {
                 _skillTabView.FlashNotEnoughPointsLabel();
             }
+
+            UpdatePointsView();
         }
 
         /// <summary> Check if have enought points to upgrade. </summary>
-        /// <param name="fieldInfo"></param>
-        /// <returns></returns>
+        /// <returns>Check result bool and amount of points to deduce.</returns>
         private (bool, int) CheckIfEnoughPoints(FieldInfo fieldInfo)
         {
             if (fieldInfo.FieldType == typeof(bool))
             {
                 bool notBelowZero = _skillUpgradesPersonal.SkillPoints - _skillUpgradesPersonal.RequiredPointsForBool >= 0;
-                return (_skillUpgradesPersonal.SkillPoints >= _skillUpgradesPersonal.RequiredPointsForBool
-                        && notBelowZero,
+                bool hasEnoughPoints = _skillUpgradesPersonal.SkillPoints >= _skillUpgradesPersonal.RequiredPointsForBool;
+
+                return (hasEnoughPoints && notBelowZero,
                         _skillUpgradesPersonal.RequiredPointsForBool);
             }
             else
             {
-                bool notBelowZero = _skillUpgradesPersonal.SkillPoints - _skillUpgradesPersonal.RequiredPointsForBool >= 0;
-                return (_skillUpgradesPersonal.SkillPoints >= _skillUpgradesPersonal.RequiredPointsForInt
-                        && notBelowZero,
+                bool notBelowZero = _skillUpgradesPersonal.SkillPoints - _skillUpgradesPersonal.RequiredPointsForInt >= 0;
+                bool hasEnoughPoints = _skillUpgradesPersonal.SkillPoints >= _skillUpgradesPersonal.RequiredPointsForInt;
+
+                return (hasEnoughPoints && notBelowZero,
                         _skillUpgradesPersonal.RequiredPointsForInt);
             }
         }
@@ -116,6 +127,7 @@ namespace IndividualGames.Game
             _toggleLocked = false;
         }
 
+        /// <summary> Update the points display in the skill tab.</summary>
         private void UpdatePointsView()
         {
             _skillTabView.UpdateRemainingPointsCounter(_skillUpgradesPersonal.SkillPoints);

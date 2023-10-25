@@ -2,6 +2,8 @@ using IndividualGames.CaseLib.Signalization;
 
 namespace IndividualGames.Enemy
 {
+    ///NOTE: I put all states in this file for easier reading, preferable to jumping between state files.
+
     /// <summary>
     /// Base AI node for FSM.
     /// </summary>
@@ -53,6 +55,11 @@ namespace IndividualGames.Enemy
         {
             _aiParams.Animator.SetBool("Idle", true);
 
+            if (_aiParams.EnemyController.CanAttackPlayer())
+            {
+                Exit();
+                StateChanged.Emit(AI.AIState.Attack);
+            }
             if (_aiParams.EnemyController.CanSpotPlayer())
             {
                 Exit();
@@ -153,15 +160,12 @@ namespace IndividualGames.Enemy
             _aiParams.EnemyController.ToggleFireVFX(true);
             _aiParams.Animator.SetBool("Attack", true);
 
-            if (!_aiParams.EnemyController.CanAttackPlayer())
+            if (!_aiParams.EnemyController.CanAttackPlayer()
+                ||
+                !_aiParams.EnemyController.CanSpotPlayer())
             {
                 Exit();
                 StateChanged.Emit(AI.AIState.Run);
-            }
-            else if (!_aiParams.EnemyController.CanSpotPlayer())
-            {
-                Exit();
-                StateChanged.Emit(AI.AIState.Idle);
             }
 
             _aiParams.EnemyController.RotateTowardsPlayer();

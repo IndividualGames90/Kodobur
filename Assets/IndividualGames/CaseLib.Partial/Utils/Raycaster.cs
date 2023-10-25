@@ -36,8 +36,6 @@ namespace IndividualGames.CaseLib.Utils
         /// <summary> Detect if we are hitting player layer with ray. </summary>
         public static (bool, RaycastHit) HitPlayer(Ray a_ray, float a_maxDistance)
         {
-            RayDebugger(a_ray, a_maxDistance);
-
             return (Physics.Raycast(a_ray,
                                     out m_hit,
                                     a_maxDistance,

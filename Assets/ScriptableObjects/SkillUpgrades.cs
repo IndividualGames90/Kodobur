@@ -8,6 +8,8 @@ namespace IndividualGames.ScriptableObjects
     [CreateAssetMenu(fileName = nameof(SkillUpgrades), menuName = "IndividualGames/SkillUpgrades")]
     public class SkillUpgrades : ScriptableObject
     {
+        public int SkillPoints;
+
         #region Player Talents
         public int PlayerWalkSpeed;
         public int PlayerJumpHeight;

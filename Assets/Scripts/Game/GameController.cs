@@ -33,6 +33,9 @@ namespace IndividualGames.Game
             GameEnded.Connect(GameOver);
 
             IncrementalIDMaker.Clear();
+
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         private void GameOver()

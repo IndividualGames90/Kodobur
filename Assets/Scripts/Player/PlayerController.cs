@@ -24,10 +24,12 @@ namespace IndividualGames.Player
         [SerializeField] private FPSController _fpsController;
         [SerializeField] private GunController _gunController;
 
-        private PlayerInputs PlayerInputs;
+        public readonly BasicSignal PlayerLevelUp = new();
 
         public bool TABKey => _tabKey;
         private bool _tabKey => PlayerInputs.Player.TAB.ReadValue<float>() > 0;
+
+        private PlayerInputs PlayerInputs;
 
         private BasicSignal<string> _onPlayerHealthUpdate = new();
         private BasicSignal<string> _onEnemyKilledUpdate = new();
@@ -108,6 +110,7 @@ namespace IndividualGames.Player
             _playerStatsPersonal.Level++;
             _onLevelUpUpdate.Emit(_playerStatsPersonal.Level.ToString());
             OnExperienceChanged();
+            PlayerLevelUp.Emit();
         }
 
         /// <summary> Gained experience. </summary>

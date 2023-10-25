@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillTab: {fileID: 0}
+  _skillUpgrades: {fileID: 11400000, guid: 8444e88d435d1f1419555fbd747e3845, type: 2}

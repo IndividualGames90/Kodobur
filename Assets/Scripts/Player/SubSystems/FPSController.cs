@@ -108,5 +108,17 @@ namespace IndividualGames.Player
         {
             _grounded = grounded;
         }
+
+        /// <summary> Update move speed. </summary>
+        public void UpdateMoveSpeed(int value)
+        {
+            _moveSpeed += value;
+        }
+
+        /// <summary> Update jump speed. </summary>
+        public void UpdateJumpSpeed(int value)
+        {
+            _jumpHeight += value;
+        }
     }
 }

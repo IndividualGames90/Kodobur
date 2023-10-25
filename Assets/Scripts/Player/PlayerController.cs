@@ -173,5 +173,24 @@ namespace IndividualGames.Player
             _onHealthSliderChanged.DisconnectAll();
             _onExperienceSliderChanged.DisconnectAll();
         }
+
+        /// <summary> Update skill values on upgrade. </summary>
+        public void UpdateSkills(SkillUpgrades newSkills)
+        {
+            if (_playerStatsPersonal == null || _gunStatsPersonal == null)
+            {
+                return;
+            }
+
+            _fpsController.UpdateMoveSpeed(newSkills.PlayerWalkSpeed / 2);
+            _fpsController.UpdateJumpSpeed(newSkills.PlayerJumpHeight);
+
+            _playerStatsPersonal.HealthMaximum += newSkills.PlayerHealthMax;
+
+            _gunStatsPersonal.AttackDamage += newSkills.GunDamage;
+            _gunStatsPersonal.BulletCapacity += newSkills.GunAmmoMax;
+            _gunStatsPersonal.PierceShot = newSkills.PierceShot;
+            _gunStatsPersonal.TripleShot = newSkills.TripleShot;
+        }
     }
 }

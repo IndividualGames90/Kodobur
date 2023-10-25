@@ -131,6 +131,8 @@ namespace IndividualGames.Game
         private void UpdatePointsView()
         {
             _skillTabView.UpdateRemainingPointsCounter(_skillUpgradesPersonal.SkillPoints);
+
+            _playerController.UpdateSkills(_skillUpgradesPersonal);
         }
     }
 }

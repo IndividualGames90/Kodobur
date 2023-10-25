@@ -15,6 +15,8 @@ namespace IndividualGames.Weapon
         private WaitForSeconds _waitPoolReturn = new(20);
         private int _damage;
         private bool _playerOwned;
+        private bool _pierceShot;
+        private GameObject _lastHitTarget;
 
         private void FixedUpdate()
         {
@@ -26,32 +28,44 @@ namespace IndividualGames.Weapon
             if (other.transform.CompareTag(Tags.Player) && !_playerOwned)
             {
                 other.GetComponent<PlayerController>().Damage(_damage);
+                _pool.ReturnToPool(gameObject);
+                return;
             }
             else if (other.transform.CompareTag(Tags.Ground))
             {
-                //TODO: PLAY VFX
+                _pool.ReturnToPool(gameObject);
+                return;
             }
             else if (other.transform.CompareTag(Tags.Enemy))
             {
-                other.GetComponent<EnemyController>().Damage(_damage);
-            }
+                if (!_pierceShot)
+                {
+                    other.GetComponent<EnemyController>().Damage(_damage);
+                    _pool.ReturnToPool(gameObject);
+                    return;
+                }
 
-            if (_pool != null)
-            {
-                _pool.ReturnToPool(gameObject);
-            }
-            else
-            {
-                Debug.Log($"Pool empty");
+                if (_pierceShot && _lastHitTarget == null)
+                {
+                    _lastHitTarget = other.gameObject;
+                    other.GetComponent<EnemyController>().Damage(_damage);
+                }
+                else if (_pierceShot && !_lastHitTarget.name.Equals(other.name))
+                {
+                    _lastHitTarget = other.gameObject;
+                    other.GetComponent<EnemyController>().Damage(_damage);
+                }
             }
         }
 
         /// <summary> Bullet if fired and in motion. </summary>
-        public void Fired(int damage, bool playerOwned, GameObjectPool returnPool)
+        public void Fired(int damage, bool playerOwned, GameObjectPool returnPool, bool pierceShot = false)
         {
+            _lastHitTarget = null;
             _playerOwned = playerOwned;
             _pool = returnPool;
             _damage = damage;
+            _pierceShot = pierceShot;
             StartCoroutine(PoolCountdown());
         }
 

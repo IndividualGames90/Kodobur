@@ -42,6 +42,7 @@ namespace IndividualGames.Game
                 _timer.Restart();
                 var go = GameObjectFactory.Instance.CreateObjectOfName(_prefab);
                 go.transform.position = RandomSpawnLocation();
+                go.name += _currentEnemyCount.ToString();
 
                 _currentEnemyCount++;
             }

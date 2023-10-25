@@ -19,6 +19,8 @@ namespace IndividualGames.Player
         [SerializeField] private float _moveSpeed = 2.0f;
         [SerializeField] private float _sprintSpeed = 3.0f;
 
+        public bool _movementLocked = false;
+
         private bool _grounded = true;
         private Vector3 _playerVelocity;
         private float _jumpHeight = 1.0f;
@@ -47,7 +49,7 @@ namespace IndividualGames.Player
 
         private void Update()
         {
-            if (!_initialized)
+            if (!_initialized || _movementLocked)
             {
                 return;
             }

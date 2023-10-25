@@ -92,8 +92,15 @@ namespace IndividualGames.Player
 
             if (_playerStatsPersonal.Health <= 0)
             {
-                _gameEnded.Emit();
+                PlayerKilled();
             }
+        }
+
+        /// <summary> Player is dead. </summary>
+        private void PlayerKilled()
+        {
+            _fpsController._movementLocked = true;
+            _gameEnded.Emit();
         }
 
         /// <summary> Player killed an enemy. </summary>

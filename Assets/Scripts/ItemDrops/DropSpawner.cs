@@ -67,6 +67,7 @@ namespace IndividualGames.ItemDrops
         /// <summary> A drop is destroyed. </summary>
         private void OnDropDestroyed()
         {
+            _timer.Restart();
             _currentDropCount--;
         }
     }

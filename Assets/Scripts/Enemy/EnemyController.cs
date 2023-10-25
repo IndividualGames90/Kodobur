@@ -5,6 +5,7 @@ using IndividualGames.DI;
 using IndividualGames.Game;
 using IndividualGames.Pool;
 using IndividualGames.ScriptableObjects;
+using IndividualGames.UI;
 using IndividualGames.Weapon;
 using System.Collections;
 using UnityEngine;
@@ -26,6 +27,7 @@ namespace IndividualGames.Enemy
         [SerializeField] private GameObject[] _fireVFX;
 
         [SerializeField] private Transform _muzzleTransform;
+        [SerializeField] private EnemyHealthSlider _healthSlider;
 
         private EnemyStats _enemyStatsPersonal;
         private GameObjectPool _bulletPool;
@@ -67,6 +69,7 @@ namespace IndividualGames.Enemy
         public void Damage(int damage)
         {
             _enemyStatsPersonal.Health -= damage;
+            _healthSlider.UpdateSliderValue((float)_enemyStatsPersonal.Health / (float)_enemyStatsPersonal.HealthMax);
 
             IsDead();
         }

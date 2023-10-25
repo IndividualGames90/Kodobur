@@ -67,12 +67,15 @@ namespace IndividualGames.Game
                 {
                     fieldInfo.SetValue(_skillUpgradesPersonal, (int)fieldValue + 1);
                     _skillUpgradesPersonal.SkillPoints -= checkResultPair.Item2;
+
+                    pressedButtonObject.GetComponent<SliderControls>().UpdateSliderValue((float)((int)fieldValue + 1) / 5f);
                 }
                 else if (fieldInfo.FieldType == typeof(bool) && !(bool)fieldValue)
                 {
                     fieldInfo.SetValue(_skillUpgradesPersonal, true);
                     _skillUpgradesPersonal.SkillPoints -= checkResultPair.Item2;
 
+                    pressedButtonObject.GetComponent<SliderControls>().UpdateSliderValue(1);
                 }
             }
             else

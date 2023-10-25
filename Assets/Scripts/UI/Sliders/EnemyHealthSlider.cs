@@ -13,7 +13,7 @@ namespace IndividualGames.UI
         {
             _slider.fillAmount = value;
 
-            if (value == 0)
+            if (value <= 0)
             {
                 _backgroundImage.SetActive(false);
             }

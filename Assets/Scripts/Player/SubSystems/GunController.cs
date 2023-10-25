@@ -72,10 +72,15 @@ namespace IndividualGames.Player
 
             SpendAmmo();
 
-            var bullet = _bulletPool.Retrieve();
-            bullet.GetComponent<BulletController>().Fired(_gunStats.AttackDamage, true, _bulletPool, _gunStats.PierceShot);
-            bullet.transform.position = _muzzleTransform.position;
-            bullet.transform.forward = _muzzleTransform.forward;
+            int bulletCount = _gunStats.TripleShot ? 3 : 1;
+            int[] forwardDegrees = new int[] { 0, -15, 15 };
+            for (int i = 0; i < bulletCount; i++)
+            {
+                var bullet = _bulletPool.Retrieve();
+                bullet.GetComponent<BulletController>().Fired(_gunStats.AttackDamage, true, _bulletPool, _gunStats.PierceShot);
+                bullet.transform.position = _muzzleTransform.position;
+                bullet.transform.forward = Quaternion.Euler(0, forwardDegrees[i], 0) * _muzzleTransform.forward;
+            }
 
             yield return _waitGunFireInterval;
 

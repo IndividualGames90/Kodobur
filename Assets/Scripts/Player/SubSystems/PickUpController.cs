@@ -12,7 +12,7 @@ namespace IndividualGames.Player
     {
         [SerializeField] PlayerController _controller;
 
-        private WaitForSeconds _waitDelay = new(.5f);
+        private WaitForSeconds _waitDelay = new(.2f);
 
         private bool _triggerLocked = false;
 

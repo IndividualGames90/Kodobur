@@ -40,6 +40,9 @@ namespace IndividualGames.Game
 
         private void GameOver()
         {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
             _restartFrame.SetActive(true);
         }
 

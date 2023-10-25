@@ -8,7 +8,13 @@ namespace IndividualGames.UI
     /// </summary>
     public class SliderControls : MonoBehaviour
     {
+        [SerializeField] private bool _startZero;
         [SerializeField] protected Image _slider;
+
+        private void Awake()
+        {
+            _slider.fillAmount = _startZero ? 0 : 1;
+        }
 
         public virtual void UpdateSliderValue(float value)
         {

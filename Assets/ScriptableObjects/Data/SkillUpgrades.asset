@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d074c55524a0ddc46b982f57cb36f6b7, type: 3}
   m_Name: SkillUpgrades
   m_EditorClassIdentifier: 
+  SkillPoints: 10
   PlayerWalkSpeed: 0
   PlayerJumpHeight: 0
   PlayerHealthMax: 0
@@ -20,5 +21,5 @@ MonoBehaviour:
   PierceShot: 0
   TripleShot: 0
   SkillCap: 5
-  RequiredOtherSkillPoints: 1
-  RequiredTripleShotPoints: 2
+  RequiredPointsForInt: 1
+  RequiredPointsForBool: 2

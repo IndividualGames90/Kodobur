@@ -36,6 +36,7 @@ namespace IndividualGames.UI
         /// <summary> Flash label for a brief second. </summary>
         public void FlashNotEnoughPointsLabel()
         {
+            StopAllCoroutines();
             StartCoroutine(FlashLabel());
         }
 

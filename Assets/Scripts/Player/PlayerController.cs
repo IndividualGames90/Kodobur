@@ -162,9 +162,7 @@ namespace IndividualGames.Player
                 _onExperienceSliderChanged.Emit(value);
             }
             catch (IndexOutOfRangeException e)
-            {
-                Debug.LogWarning($"{e.GetType().Name}: Level exceeded.");
-            }
+            { }
         }
 
         private void OnDestroy()

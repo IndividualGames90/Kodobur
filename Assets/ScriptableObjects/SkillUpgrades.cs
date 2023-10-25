@@ -28,8 +28,8 @@ namespace IndividualGames.ScriptableObjects
         #endregion
 
         #region Required Points
-        public int RequiredOtherSkillPoints = 1;
-        public int RequiredTripleShotPoints = 2; ///DevNote: Made this 2 for easier testing.
+        public int RequiredPointsForInt = 1;
+        public int RequiredPointsForBool = 2; ///DevNote: Made this 2 for easier testing.
         #endregion
     }
 }

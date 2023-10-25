@@ -180,6 +180,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3982628044677186814}
     - target: {fileID: 8893219377028950466, guid: a0e3b6fb0e26a894f93c28a5dbcd35be, type: 3}
+      propertyPath: _isFloating
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8893219377028950466, guid: a0e3b6fb0e26a894f93c28a5dbcd35be, type: 3}
       propertyPath: _fireVFX.Array.size
       value: 2
       objectReference: {fileID: 0}

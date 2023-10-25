@@ -109,7 +109,7 @@ namespace IndividualGames.Enemy
 
         private void FloatingDied()
         {
-            Destroy(_agent);
+            _agent.enabled = false;
             var rb = gameObject.AddComponent<Rigidbody>();
             rb.useGravity = true;
         }
@@ -125,6 +125,11 @@ namespace IndividualGames.Enemy
         /// <summary> Set destination towards a given target. Can be forced without checks. </summary>
         public void MoveTowards(Vector3 moveTo, bool forceMove = false)
         {
+            if (!_agent.enabled)
+            {
+                return;
+            }
+
             if (forceMove)
             {
                 _agent.SetDestination(moveTo);
@@ -150,7 +155,10 @@ namespace IndividualGames.Enemy
         /// <summary> Reset navmesh for full stop. </summary>
         public void StopAgent()
         {
-            _agent.ResetPath();
+            if (_agent.enabled)
+            {
+                _agent.ResetPath();
+            }
         }
 
         /// <summary> One incremental of rotating towards given target. </summary>

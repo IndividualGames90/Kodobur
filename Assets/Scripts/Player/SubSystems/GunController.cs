@@ -19,6 +19,7 @@ namespace IndividualGames.Player
 
         private PlayerInputs _input;
         private bool LMBPressed => _input.Player.LMB.ReadValue<float>() > .5f;
+        private bool _sprinting => _input.Player.Sprint.ReadValue<float>() > .5f;
 
         private GunStats _gunStats;
 
@@ -48,7 +49,7 @@ namespace IndividualGames.Player
 
         private void Update()
         {
-            if (!_initialized)
+            if (!_initialized || _sprinting)
             {
                 return;
             }

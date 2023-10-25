@@ -26,6 +26,9 @@ namespace IndividualGames.Player
 
         private PlayerInputs PlayerInputs;
 
+        public bool TABKey => _tabKey;
+        private bool _tabKey => PlayerInputs.Player.TAB.ReadValue<float>() > 0;
+
         private BasicSignal<string> _onPlayerHealthUpdate = new();
         private BasicSignal<string> _onEnemyKilledUpdate = new();
         private BasicSignal<string> _onLevelUpUpdate = new();

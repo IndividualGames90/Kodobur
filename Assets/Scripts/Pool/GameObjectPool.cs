@@ -9,18 +9,22 @@ namespace IndividualGames.Pool
     public class GameObjectPool : MonoBehaviour
     {
         [SerializeField] private GameObject prefab;
-        [SerializeField] private int poolCapacity = 20;
+        [SerializeField] private int poolCapacity = 30;
 
         private Queue<GameObject> pool = new();
 
         public GameObject Retrieve()
         {
-            if (pool.Count == 0)
+            if (pool.Count == 0 || pool.Count < 10)
             {
                 return Instantiate(prefab);
             }
 
             var go = pool.Dequeue();
+            if (go == null)
+            {
+                go = Instantiate(prefab);
+            }
             go.SetActive(true);
             return go;
         }

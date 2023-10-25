@@ -28,13 +28,23 @@ namespace IndividualGames.Weapon
             if (other.transform.CompareTag(Tags.Player) && !_playerOwned)
             {
                 other.GetComponent<PlayerController>().Damage(_damage);
+                _pool.ReturnToPool(gameObject);
+                return;
             }
             else if (other.transform.CompareTag(Tags.Ground))
             {
                 _pool.ReturnToPool(gameObject);
+                return;
             }
             else if (other.transform.CompareTag(Tags.Enemy))
             {
+                if (!_pierceShot)
+                {
+                    other.GetComponent<EnemyController>().Damage(_damage);
+                    _pool.ReturnToPool(gameObject);
+                    return;
+                }
+
                 if (_pierceShot && _lastHitTarget == null)
                 {
                     _lastHitTarget = other.gameObject;
@@ -45,22 +55,6 @@ namespace IndividualGames.Weapon
                     _lastHitTarget = other.gameObject;
                     other.GetComponent<EnemyController>().Damage(_damage);
                 }
-                else if (!_pierceShot)
-                {
-                    other.GetComponent<EnemyController>().Damage(_damage);
-                }
-            }
-
-            if (_pool != null)
-            {
-                if (!_pierceShot)
-                {
-                    _pool.ReturnToPool(gameObject);
-                }
-            }
-            else
-            {
-                Debug.Log($"Pool empty");
             }
         }
 

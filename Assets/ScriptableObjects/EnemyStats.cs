@@ -9,6 +9,7 @@ namespace IndividualGames.ScriptableObjects
     public class EnemyStats : ScriptableObject
     {
         public int Health = 30;
+        public int HealthMax = 30;
         public int AttackDamage = 10;
         public int ExperienceAward = 1;
         public int Speed = 15;

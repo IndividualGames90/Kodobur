@@ -29,6 +29,8 @@ namespace IndividualGames.Enemy
         [SerializeField] private Transform _muzzleTransform;
         [SerializeField] private EnemyHealthSlider _healthSlider;
 
+        [SerializeField] private bool _isBoss;
+
         private EnemyStats _enemyStatsPersonal;
         private GameObjectPool _bulletPool;
         private Transform _playerLocation;
@@ -194,10 +196,28 @@ namespace IndividualGames.Enemy
         {
             _attackLocked = true;
 
-            var bullet = _bulletPool.Retrieve();
-            bullet.GetComponent<BulletController>().Fired(_enemyStatsPersonal.AttackDamage, false, _bulletPool);
-            bullet.transform.position = _muzzleTransform.position;
-            bullet.transform.forward = _playerLocation.position - _muzzleTransform.position;
+            var attackCount = _isBoss ? 10 : 1;
+
+            Vector3[] radialArray = new Vector3[attackCount];
+            var radius = 5f;
+
+            for (int i = 0; i < attackCount; i++)
+            {
+                float angle = 2 * Mathf.PI * i / attackCount;
+                float x = Mathf.Cos(angle) * radius;
+                float z = Mathf.Sin(angle) * radius; // Using Z for depth, assuming Y is up
+
+                radialArray[i] = new Vector3(x, 0, z);
+            }
+
+            for (int i = 0; i < attackCount; i++)
+            {
+                var bullet = _bulletPool.Retrieve();
+                bullet.GetComponent<BulletController>().Fired(_enemyStatsPersonal.AttackDamage, false, _bulletPool);
+                bullet.transform.position = _muzzleTransform.position;
+                bullet.transform.forward = _playerLocation.position - _muzzleTransform.position;
+                bullet.transform.forward = Quaternion.Euler(radialArray[i]) * bullet.transform.forward;
+            }
 
             yield return _attackWait;
             _attackLocked = false;
